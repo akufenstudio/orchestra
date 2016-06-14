@@ -26,6 +26,13 @@ if (!function_exists('get_template_directory')) {
     }
 }
 
+if (!function_exists('get_post_type')) {
+    function get_post_type()
+    {
+        return 'page';
+    }
+}
+
 require_once __DIR__ . '/assets/wp-config.php';
 
 require_once __DIR__ . '/../vendor/autoload.php';
