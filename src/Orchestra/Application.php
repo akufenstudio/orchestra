@@ -135,7 +135,7 @@ class Application extends \Phalcon\Mvc\Application
         });
 
         // Dispatcher configuration
-        $di->set('dispatcher', function () use ($di, $config) {
+        $di->setShared('dispatcher', function () use ($di, $config) {
 
             // Add a custom dispatcher to the dispatch loop
             $customDispatcher = new \Akufen\Orchestra\Services\Dispatcher();
