@@ -8,7 +8,7 @@ Orchestra is a minimalist object-oriented superset that uses [Phalcon](https://p
 ## Installation
 Orchestra can be installed inside your theme with [Composer](https://getcomposer.org/) using this command:
 ```sh
-composer require akufen/orchestra
+composer require akufen/orchestra v0.1.0
 ```
 
 ## Usage
