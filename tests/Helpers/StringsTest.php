@@ -25,6 +25,9 @@ use Akufen\Orchestra\Helpers\Strings;
 
 class StringsTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Test underscored function
+     */
     public function testUnderscored()
     {
         $this->assertEquals(

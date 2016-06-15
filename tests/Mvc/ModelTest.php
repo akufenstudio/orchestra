@@ -19,47 +19,82 @@ namespace Akufen\Orchestra\Tests\Mvc;
 
 class ModelTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Model tests setup
+     */
     protected function setUp()
     {
         $this->model = new \Akufen\Orchestra\Mvc\Model();
     }
 
+    /**
+     * Test Accessible trait get function
+     */
     public function testGet()
     {
-        $this->model->test_variable = 'test';
+        // Getting the variables should fail
+        $this->setExpectedException('Exception');
+        $this->model->getTestVariable();
+        $this->model->getAnotherVariable();
 
-        $this->assertEquals(
-            'test',
-            $this->model->getTestVariable()
-        );
+        // Initialize underscored & camel cased
+        $this->model->test_variable = 'test';
+        $this->model->anotherVariable = 'test';
+
+        // Getting the variables should succeed
+        $this->assertEquals('test', $this->model->getTestVariable());
+        $this->assertEquals('test', $this->model->getAnotherVariable());
     }
 
+    /**
+     * Test accessible trait set function
+     */
     public function testSet()
     {
+        // Initialize
         $this->model->setTestVariable('test');
 
-        $this->assertEquals(
-            'test',
-            $this->model->testVariable
-        );
+        // Setting the variable should work
+        $this->assertEquals('test', $this->model->testVariable);
     }
 
+    /**
+     * Test assignable from object trait.
+     * TODO: Extend testing, test behaviour with numerical array.
+     */
     public function testFromObject()
     {
-        $object = new \stdClass();
-        $object->name = 'text object';
+        // Name should not exist
+        $this->assertFalse(isset($this->model->name));
 
+        // Initialize
+        $object = new \stdClass();
+        $object->name = 'test';
+
+        // Assign object to model
         $this->model->fromObject($object);
+
+        // Name should be set and have the good value
         $this->assertTrue(isset($this->model->name));
-        $this->assertEquals('text object', $this->model->name);
+        $this->assertEquals('test', $this->model->name);
     }
 
+    /**
+     * Test assignable from array trait
+     */
     public function testFromArray()
     {
-        $array = array('first' => 'second');
+        // Name should not exist
+        $this->assertFalse(isset($this->model->name));
 
+        // Initialize
+        $array = array('name' => 'test');
+
+        // Assign array to model
         $this->model->fromArray($array);
-        $this->assertTrue(isset($this->model->first));
-        $this->assertEquals('second', $this->model->first);
+
+        // Name should be set and have the good value
+        $this->assertTrue(isset($this->model->name));
+        $this->assertEquals('test', $this->model->name);
     }
 }
