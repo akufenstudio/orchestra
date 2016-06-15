@@ -81,6 +81,10 @@ trait AccessibleTrait
     {
         $name = strval($name);
 
+        if (!isset($this->$name)) {
+            throw new Exception("Access to undefined property");
+        }
+
         return $this->$name;
     }
 }
