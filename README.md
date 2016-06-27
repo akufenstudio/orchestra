@@ -23,8 +23,8 @@ To bootstrap Orchestra, add this to your `functions.php` file.
     });
 
 ## Resources
-* Access the API indice here.
-* Documentation on how to use the library can be found here.
+* Access the API indice [here](http://akufenstudio.github.io/orchestra/).
+* Documentation on how to use the library can be found in the [wiki](https://github.com/akufenstudio/orchestra/wiki).
 
 ## License
 Please see the [license file](https://github.com/akufenstudio/orchestra/blob/master/LICENSE) for more information.
