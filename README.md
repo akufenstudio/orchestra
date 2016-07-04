@@ -16,7 +16,7 @@ To bootstrap Orchestra, add this to your `functions.php` file.
 
     // Bootstrap Orchestra
     require __DIR__ . '/vendor/autoload.php';
-    add_action('get_header', function() {
+    add_action('template_redirect', function() {
         $app = new \Akufen\Orchestra\Application();
         $app->handle();
         exit;
