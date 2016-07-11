@@ -29,10 +29,16 @@ if (!function_exists('get_template_directory')) {
 if (!function_exists('get_post_type')) {
     function get_post_type()
     {
-        return 'page';
+        return 'index';
     }
 }
 
+if (!function_exists('get_page_template_slug')) {
+    function get_page_template_slug($id)
+    {
+        return 'index';
+    }
+}
 require_once __DIR__ . '/assets/wp-config.php';
 
 require_once __DIR__ . '/../vendor/autoload.php';

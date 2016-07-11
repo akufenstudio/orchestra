@@ -100,8 +100,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('show404', $dispatcher->getActionName());
 
         // Simulate wordpress behavior
-        $GLOBALS['post'] = true;
-        $GLOBALS['template'] = '/Path/to/a/template/test.php';
+        $GLOBALS['post'] = new \stdClass();
+        $GLOBALS['post']->ID = 0;
 
         // Simulate before dispatch loop event again
         $dispatcher->getEventsManager()->fire(
@@ -110,8 +110,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         );
 
         // Dispatch environment should match
-        $this->assertEquals('page', $dispatcher->getControllerName());
-        $this->assertEquals('test', $dispatcher->getActionName());
+        $this->assertEquals('index', $dispatcher->getControllerName());
+        $this->assertEquals('index', $dispatcher->getActionName());
     }
 
     /**
