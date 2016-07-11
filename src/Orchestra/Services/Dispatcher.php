@@ -35,16 +35,13 @@ class Dispatcher
      */
     public function beforeDispatchLoop(\Phalcon\Events\Event $event, \Phalcon\Mvc\Dispatcher $dispatcher)
     {
-        global $post, $template;
+        global $post;
 
         // Attempt to redirect to a controller & action
         if ($post) {
-            // Get path information for the template
-            $info = pathinfo($template);
-
             // Set the correct controller & action
             $dispatcher->setControllerName(get_post_type());
-            $dispatcher->setActionName($info['filename']);
+            $dispatcher->setActionName(str_replace('.php', '', get_page_template_slug($post->ID)));
         } else {
             // Send to a 404
             $dispatcher->setControllerName('error');
