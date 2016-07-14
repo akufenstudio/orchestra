@@ -88,20 +88,21 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatcherService()
     {
-        // Simulate before dispatch loop event
+        // Simulate before dispatch loop even/*t*/
         $dispatcher = $this->application->getDi()->getDispatcher();
         $dispatcher->getEventsManager()->fire(
             'dispatch:beforeDispatchLoop',
             $dispatcher
         );
 
-        // Dispatch environment should be error controller
+        // Default dispatch environment should be error controller
         $this->assertEquals('error', $dispatcher->getControllerName());
         $this->assertEquals('show404', $dispatcher->getActionName());
 
         // Simulate wordpress behavior
         $GLOBALS['post'] = new \stdClass();
         $GLOBALS['post']->ID = 0;
+        $GLOBALS['post']->post_type = 'index';
 
         // Simulate before dispatch loop event again
         $dispatcher->getEventsManager()->fire(
@@ -112,6 +113,10 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         // Dispatch environment should match
         $this->assertEquals('index', $dispatcher->getControllerName());
         $this->assertEquals('index', $dispatcher->getActionName());
+
+        // TODO: Test static routes environment.
+        // I haven't been able to reproduce an
+        // environment that Phalcon can match.
     }
 
     /**

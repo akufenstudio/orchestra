@@ -11,7 +11,7 @@
  * @copyright Akufen Atelier Creatif
  * @author    Nicholas Charbonneau <nicholas@akufen.ca>
  * @license   http://opensource.org/licenses/MIT
- * @version   0.1.1
+ * @version   0.1.2
  * @link      https://github.com/akufenstudio/orchestra
  */
 
@@ -24,7 +24,7 @@ namespace Akufen\Orchestra\Services;
  *
  * @package Services
  */
-class Dispatcher
+class Dispatcher extends \Phalcon\Mvc\User\Plugin
 {
     /**
      * Attempts to find a controller & action that matches the request.
@@ -36,16 +36,27 @@ class Dispatcher
     public function beforeDispatchLoop(\Phalcon\Events\Event $event, \Phalcon\Mvc\Dispatcher $dispatcher)
     {
         global $post;
+        $router = $this->getDI()->getRouter();
+
+        // Send to a 404 by default
+        $dispatcher->setControllerName('error');
+        $dispatcher->setActionName('show404');
+
+        // Get paths if router matched
+        if ($router->wasMatched()) {
+            $paths = $router->getMatchedRoute()->getPaths();
+        }
 
         // Attempt to redirect to a controller & action
-        if ($post) {
+        if (isset($paths) && is_string($paths['controller'])) {
+            $dispatcher->setModuleName($paths['module']);
+            $dispatcher->setNamespaceName($paths['namespace']);
+            $dispatcher->setControllerName($paths['controller']);
+            $dispatcher->setActionName($paths['action']);
+        } else if ($post) {
             // Set the correct controller & action
-            $dispatcher->setControllerName(get_post_type());
+            $dispatcher->setControllerName($post->post_type);
             $dispatcher->setActionName(str_replace('.php', '', get_page_template_slug($post->ID)));
-        } else {
-            // Send to a 404
-            $dispatcher->setControllerName('error');
-            $dispatcher->setActionName('show404');
         }
     }
 }

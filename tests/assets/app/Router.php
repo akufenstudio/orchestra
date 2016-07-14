@@ -25,12 +25,9 @@ class Router extends \Phalcon\Mvc\Router\Group
             'namespace' => 'App\Controllers'
         ));
 
-        // Default route
-        $this->add('/:params', array(
-            'controller' => 'index',
-            'action' => 'index',
-            'params' => 1
+        $this->add('/test', array(
+            'controller' => 'testing',
+            'action' => 'static'
         ));
-
     }
 }
