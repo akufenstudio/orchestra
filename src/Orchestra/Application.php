@@ -46,7 +46,6 @@ class Application extends \Phalcon\Mvc\Application
             }
 
             return include $file;
-
         });
 
         // Retrieve instance of configuration
@@ -76,7 +75,6 @@ class Application extends \Phalcon\Mvc\Application
             $url->setBaseUri($baseUri);
 
             return $url;
-
         });
 
         // Session service configuration
@@ -87,7 +85,6 @@ class Application extends \Phalcon\Mvc\Application
             $session->start();
 
             return $session;
-
         });
 
         // Configure router
@@ -116,7 +113,6 @@ class Application extends \Phalcon\Mvc\Application
             }
 
             return $router;
-
         });
 
         // Database configuration
@@ -145,7 +141,6 @@ class Application extends \Phalcon\Mvc\Application
             $dispatcher->setEventsManager($eventsManager);
 
             return $dispatcher;
-
         });
 
         // Modules configuration
@@ -170,7 +165,6 @@ class Application extends \Phalcon\Mvc\Application
             }
 
             return $modules;
-
         });
 
         // Set the application dependency injector & register modules
