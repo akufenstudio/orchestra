@@ -56,7 +56,17 @@ class Dispatcher extends \Phalcon\Mvc\User\Plugin
         } else if ($post) {
             // Set the correct controller & action
             $dispatcher->setControllerName($post->post_type);
-            $dispatcher->setActionName(str_replace('.php', '', get_page_template_slug($post->ID)));
+
+            // Retrieve page slug, taxonomy or single action
+            if(!empty($template = get_page_template_slug($post->ID))) {
+                $dispatcher->setActionName(
+                    str_replace('.php', '', get_page_template_slug($post->ID))
+                );
+            } else {
+                $dispatcher->setActionName(
+                    is_post_type_archive($post->post_type)? 'index' : 'single'
+                );
+            }
         }
     }
 }
