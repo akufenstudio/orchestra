@@ -149,6 +149,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         // Application should raise exception without config
         unlink(__DIR__.'/config.php');
         $this->setExpectedException('Exception');
-        $this->application->handle();
+        $this->application = new Application();
     }
 }
