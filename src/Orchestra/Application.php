@@ -27,12 +27,9 @@ namespace Akufen\Orchestra;
 class Application extends \Phalcon\Mvc\Application
 {
     /**
-     * Bootstrap the orchestra application.
-     *
-     * @params String $uri The uri to handle
-     * @return void
+     * {@inheritdoc}
      */
-    public function handle($uri = null)
+    public function __construct()
     {
         // Create dependency injector
         $di = new \Phalcon\DI\FactoryDefault();
@@ -179,9 +176,18 @@ class Application extends \Phalcon\Mvc\Application
         // Set the application dependency injector & register modules
         $this->setDI($di);
         $this->registerModules($di->getModules());
+    }
 
+    /**
+     * Bootstrap the orchestra application.
+     *
+     * @params String $uri The uri to handle
+     * @return void
+     */
+    public function handle($uri = null)
+    {
         // Set the data url for the router
-        $_GET['_url'] = ($uri)? $uri : $di->getRequest()->getUri();
+        $_GET['_url'] = ($uri)? $uri : $this->di->getRequest()->getUri();
 
         // Handle the request & paste rendered html
         echo parent::handle()->getContent();
