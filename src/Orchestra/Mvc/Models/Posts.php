@@ -70,4 +70,14 @@ class Posts extends \Akufen\Orchestra\Mvc\Model
             array('alias' => 'termRelationships')
         );
     }
+
+    /**
+     * Retrieve the post's permalink.
+     *
+     * @return string $permalink The post's permalink.
+     */
+    public function getPermalink()
+    {
+        return get_permalink($this->ID);
+    }
 }
