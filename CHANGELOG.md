@@ -7,6 +7,7 @@
     - Added a getPermalink method for Posts
     - Application registers services on construction
     - Support for taxonomy archives
+    - Fix TermTaxonomy relationship with Terms
 
 0.1.2 (2016-07-14)
     - Added static routes support
