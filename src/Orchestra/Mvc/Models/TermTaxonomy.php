@@ -50,7 +50,7 @@ class TermTaxonomy extends \Akufen\Orchestra\Mvc\Model
         $this->belongsTo(
             'term_id',
             'Akufen\Orchestra\Mvc\Models\Terms',
-            'term_taxonomy_id',
+            'term_id',
             array('alias' => 'term')
         );
 
