@@ -11,7 +11,7 @@
  * @copyright Akufen Atelier Creatif
  * @author    Nicholas Charbonneau <nicholas@akufen.ca>
  * @license   http://opensource.org/licenses/MIT
- * @version   0.1.2
+ * @version   0.1.3
  * @link      https://github.com/akufenstudio/orchestra
  */
 
