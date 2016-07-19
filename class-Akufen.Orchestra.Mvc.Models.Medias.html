@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Class Akufen\Orchestra\Mvc\Models\Users</title>
+	<title>Class Akufen\Orchestra\Mvc\Models\Medias</title>
 
 	<link rel="stylesheet" href="resources/style.css?e99947befd7bf673c6b43ff75e9e0f170c88a60e">
 
@@ -70,7 +70,7 @@
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.CommentMeta.html">CommentMeta</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.Comments.html">Comments</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.Links.html">Links</a></li>
-				<li><a href="class-Akufen.Orchestra.Mvc.Models.Medias.html">Medias</a></li>
+				<li class="active"><a href="class-Akufen.Orchestra.Mvc.Models.Medias.html">Medias</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.Options.html">Options</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.PostMeta.html">PostMeta</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.Posts.html">Posts</a></li>
@@ -79,7 +79,7 @@
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.Terms.html">Terms</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.TermTaxonomy.html">TermTaxonomy</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.UserMeta.html">UserMeta</a></li>
-				<li class="active"><a href="class-Akufen.Orchestra.Mvc.Models.Users.html">Users</a></li>
+				<li><a href="class-Akufen.Orchestra.Mvc.Models.Users.html">Users</a></li>
 			</ul>
 
 
@@ -118,13 +118,13 @@
 	</div>
 
 <div id="content" class="class">
-	<h1>Class Users</h1>
+	<h1>Class Medias</h1>
 
 
 	<div class="description">
-	<p>Akufen\Orchestra\Mvc\Models\Users</p>
+	<p>Akufen\Orchestra\Mvc\Models</p>
 
-<p>A model for WordPress users.</p>
+<p>A model for WordPress posts</p>
 	</div>
 
 	<dl class="tree">
@@ -156,7 +156,14 @@ Phalcon\Mvc\Model
 		</dd>
 		<dd style="padding-left:60px">
 			<img src="resources/inherit.png" alt="Extended by">
-<b><span>Akufen\Orchestra\Mvc\Models\Users</span></b>			
+			<a href="class-Akufen.Orchestra.Mvc.Models.Posts.html"><span>Akufen\Orchestra\Mvc\Models\Posts</span></a>
+			
+			
+			
+		</dd>
+		<dd style="padding-left:90px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b><span>Akufen\Orchestra\Mvc\Models\Medias</span></b>			
 			
 			
 		</dd>
@@ -176,8 +183,8 @@ Phalcon\Mvc\Model
 		<b>Package:</b> Models<br>
 
 				<b>Uses:</b>
-				<code><a href="class-Akufen.Orchestra.Mvc.Model.html">Akufen\Orchestra\Mvc\Model</a></code><br>
-			<b>Located at</b> <a href="source-class-Akufen.Orchestra.Mvc.Models.Users.html#20-57" title="Go to source code">Orchestra/Mvc/Models/Users.php</a>
+				\Akufen\Orchestra\Mvc\Posts<br>
+			<b>Located at</b> <a href="source-class-Akufen.Orchestra.Mvc.Models.Medias.html#20-54" title="Go to source code">Orchestra/Mvc/Models/Medias.php</a>
 		<br>
 	</div>
 
@@ -197,17 +204,58 @@ Phalcon\Mvc\Model
 
 		<td class="name"><div>
 		<a class="anchor" href="#_initialize">#</a>
-		<code><a href="source-class-Akufen.Orchestra.Mvc.Models.Users.html#30-56" title="Go to source code">initialize</a>( )</code>
+		<code><a href="source-class-Akufen.Orchestra.Mvc.Models.Medias.html#30-38" title="Go to source code">initialize</a>( )</code>
 
 		<div class="description short">
-			<p>Initialize a user's source &amp; relationships.</p>
+			<p>Initialize a post's source &amp; relationships</p>
 		</div>
 
 		<div class="description detailed hidden">
-			<p>Initialize a user's source &amp; relationships.</p>
+			<p>Initialize a post's source &amp; relationships</p>
 
 
 
+
+
+
+				<h4>Overrides</h4>
+				<div class="list"><code><a href="class-Akufen.Orchestra.Mvc.Models.Posts.html#_initialize">Akufen\Orchestra\Mvc\Models\Posts::initialize()</a></code></div>
+
+		</div>
+		</div></td>
+	</tr>
+	<tr data-order="findById" id="_findById">
+
+		<td class="attributes"><code>
+			 public static
+
+			mixed
+			
+			</code>
+		</td>
+
+		<td class="name"><div>
+		<a class="anchor" href="#_findById">#</a>
+		<code><a href="source-class-Akufen.Orchestra.Mvc.Models.Medias.html#40-53" title="Go to source code">findById</a>( <span>integer <var>$id</var></span> )</code>
+
+		<div class="description short">
+			<p>Retrieve a media post by id.</p>
+		</div>
+
+		<div class="description detailed hidden">
+			<p>Retrieve a media post by id.</p>
+
+
+				<h4>Parameters</h4>
+				<div class="list"><dl>
+					<dt><var>$id</var></dt>
+					<dd>The id of the media we're looking for.</dd>
+				</dl></div>
+
+				<h4>Returns</h4>
+				<div class="list">
+					mixed<br>$media The media or false.
+				</div>
 
 
 
@@ -217,6 +265,14 @@ Phalcon\Mvc\Model
 	</tr>
 	</table>
 
+	<table class="summary inherited">
+	<caption>Methods inherited from <a href="class-Akufen.Orchestra.Mvc.Models.Posts.html#methods">Akufen\Orchestra\Mvc\Models\Posts</a></caption>
+	<tr>
+		<td><code>
+			<a href="class-Akufen.Orchestra.Mvc.Models.Posts.html#_getPermalink">getPermalink()</a>
+		</code></td>
+	</tr>
+	</table>
 	<table class="summary inherited">
 	<caption>Methods inherited from Phalcon\Mvc\Model</caption>
 	<tr>

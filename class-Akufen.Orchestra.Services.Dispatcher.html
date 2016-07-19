@@ -119,6 +119,29 @@
 <p>A custom dispatcher for WordPress architecture</p>
 	</div>
 
+	<dl class="tree">
+		<dd style="padding-left:0px">
+Phalcon\Di\Injectable
+			 implements 
+<span>Phalcon\Di\InjectionAwareInterface</span>, 
+			
+<span>Phalcon\Events\EventsAwareInterface</span>
+			
+			
+		</dd>
+		<dd style="padding-left:30px">
+			<img src="resources/inherit.png" alt="Extended by">
+Phalcon\Mvc\User\Plugin
+			
+			
+		</dd>
+		<dd style="padding-left:60px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b><span>Akufen\Orchestra\Services\Dispatcher</span></b>			
+			
+			
+		</dd>
+	</dl>
 
 
 
@@ -133,7 +156,7 @@
 		<b>Namespace:</b> <a href="namespace-Akufen.html">Akufen</a>\<a href="namespace-Akufen.Orchestra.html">Orchestra</a>\<a href="namespace-Akufen.Orchestra.Services.html">Services</a><br>
 		<b>Package:</b> Services<br>
 
-			<b>Located at</b> <a href="source-class-Akufen.Orchestra.Services.Dispatcher.html#20-54" title="Go to source code">Orchestra/Services/Dispatcher.php</a>
+			<b>Located at</b> <a href="source-class-Akufen.Orchestra.Services.Dispatcher.html#20-72" title="Go to source code">Orchestra/Services/Dispatcher.php</a>
 		<br>
 	</div>
 
@@ -153,7 +176,7 @@
 
 		<td class="name"><div>
 		<a class="anchor" href="#_beforeDispatchLoop">#</a>
-		<code><a href="source-class-Akufen.Orchestra.Services.Dispatcher.html#29-53" title="Go to source code">beforeDispatchLoop</a>( <span>Phalcon\Events\Event <var>$event</var></span>, <span>Phalcon\Mvc\Dispatcher <var>$dispatcher</var></span> )</code>
+		<code><a href="source-class-Akufen.Orchestra.Services.Dispatcher.html#29-71" title="Go to source code">beforeDispatchLoop</a>( <span>Phalcon\Events\Event <var>$event</var></span>, <span>Phalcon\Mvc\Dispatcher <var>$dispatcher</var></span> )</code>
 
 		<div class="description short">
 			<p>Attempts to find a controller &amp; action that matches the request.</p>
@@ -180,6 +203,18 @@
 	</tr>
 	</table>
 
+	<table class="summary inherited">
+	<caption>Methods inherited from Phalcon\Di\Injectable</caption>
+	<tr>
+		<td><code>
+__get(), 
+getDI(), 
+getEventsManager(), 
+setDI(), 
+setEventsManager()
+		</code></td>
+	</tr>
+	</table>
 
 
 
@@ -192,6 +227,15 @@
 
 
 
+	<table class="summary inherited">
+	<caption>Properties inherited from Phalcon\Di\Injectable</caption>
+	<tr>
+		<td><code>
+<var>$_dependencyInjector</var>, 
+<var>$_eventsManager</var>
+		</code></td>
+	</tr>
+	</table>
 
 
 

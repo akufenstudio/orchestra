@@ -75,6 +75,7 @@
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.CommentMeta.html">Akufen\Orchestra\Mvc\Models\CommentMeta</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.Comments.html">Akufen\Orchestra\Mvc\Models\Comments</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.Links.html">Akufen\Orchestra\Mvc\Models\Links</a></li>
+				<li><a href="class-Akufen.Orchestra.Mvc.Models.Medias.html">Akufen\Orchestra\Mvc\Models\Medias</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.Options.html">Akufen\Orchestra\Mvc\Models\Options</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.PostMeta.html">Akufen\Orchestra\Mvc\Models\PostMeta</a></li>
 				<li><a href="class-Akufen.Orchestra.Mvc.Models.Posts.html">Akufen\Orchestra\Mvc\Models\Posts</a></li>
@@ -147,7 +148,7 @@
 </span></span><span id="11" class="l"><a href="#11">11: </a><span class="php-comment"> * @copyright Akufen Atelier Creatif
 </span></span><span id="12" class="l"><a href="#12">12: </a><span class="php-comment"> * @author    Nicholas Charbonneau &lt;nicholas@akufen.ca&gt;
 </span></span><span id="13" class="l"><a href="#13">13: </a><span class="php-comment"> * @license   http://opensource.org/licenses/MIT
-</span></span><span id="14" class="l"><a href="#14">14: </a><span class="php-comment"> * @version   0.1.0
+</span></span><span id="14" class="l"><a href="#14">14: </a><span class="php-comment"> * @version   0.1.3
 </span></span><span id="15" class="l"><a href="#15">15: </a><span class="php-comment"> * @link      https://github.com/akufenstudio/orchestra
 </span></span><span id="16" class="l"><a href="#16">16: </a><span class="php-comment"> */</span>
 </span><span id="17" class="l"><a href="#17">17: </a>
@@ -160,7 +161,7 @@
 </span></span><span id="24" class="l"><a href="#24">24: </a><span class="php-comment"> *
 </span></span><span id="25" class="l"><a href="#25">25: </a><span class="php-comment"> * @package Services
 </span></span><span id="26" class="l"><a href="#26">26: </a><span class="php-comment"> */</span>
-</span><span id="27" class="l"><a href="#27">27: </a><span class="php-keyword1">class</span> Dispatcher
+</span><span id="27" class="l"><a href="#27">27: </a><span class="php-keyword1">class</span> Dispatcher <span class="php-keyword1">extends</span> \Phalcon\Mvc\User\Plugin
 </span><span id="28" class="l"><a href="#28">28: </a>{
 </span><span id="29" class="l"><a href="#29">29: </a>    <span class="php-comment">/**
 </span></span><span id="30" class="l"><a href="#30">30: </a><span class="php-comment">     * Attempts to find a controller &amp; action that matches the request.
@@ -171,24 +172,42 @@
 </span></span><span id="35" class="l"><a href="#35">35: </a><span class="php-comment">     */</span>
 </span><span id="36" class="l"><a href="#36">36: </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">function</span> beforeDispatchLoop(\Phalcon\Events\Event <span class="php-var">$event</span>, \Phalcon\Mvc\Dispatcher <span class="php-var">$dispatcher</span>)
 </span><span id="37" class="l"><a href="#37">37: </a>    {
-</span><span id="38" class="l"><a href="#38">38: </a>        <span class="php-keyword1">global</span> <span class="php-var">$post</span>, <span class="php-var">$template</span>;
-</span><span id="39" class="l"><a href="#39">39: </a>
-</span><span id="40" class="l"><a href="#40">40: </a>        <span class="php-comment">// Attempt to redirect to a controller &amp; action</span>
-</span><span id="41" class="l"><a href="#41">41: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$post</span>) {
-</span><span id="42" class="l"><a href="#42">42: </a>            <span class="php-comment">// Get path information for the template</span>
-</span><span id="43" class="l"><a href="#43">43: </a>            <span class="php-var">$info</span> = <span class="php-keyword2">pathinfo</span>(<span class="php-var">$template</span>);
+</span><span id="38" class="l"><a href="#38">38: </a>        <span class="php-keyword1">global</span> <span class="php-var">$post</span>;
+</span><span id="39" class="l"><a href="#39">39: </a>        <span class="php-var">$router</span> = <span class="php-var">$this</span>-&gt;getDI()-&gt;getRouter();
+</span><span id="40" class="l"><a href="#40">40: </a>
+</span><span id="41" class="l"><a href="#41">41: </a>        <span class="php-comment">// Send to a 404 by default</span>
+</span><span id="42" class="l"><a href="#42">42: </a>        <span class="php-var">$dispatcher</span>-&gt;setControllerName(<span class="php-quote">'error'</span>);
+</span><span id="43" class="l"><a href="#43">43: </a>        <span class="php-var">$dispatcher</span>-&gt;setActionName(<span class="php-quote">'show404'</span>);
 </span><span id="44" class="l"><a href="#44">44: </a>
-</span><span id="45" class="l"><a href="#45">45: </a>            <span class="php-comment">// Set the correct controller &amp; action</span>
-</span><span id="46" class="l"><a href="#46">46: </a>            <span class="php-var">$dispatcher</span>-&gt;setControllerName(get_post_type());
-</span><span id="47" class="l"><a href="#47">47: </a>            <span class="php-var">$dispatcher</span>-&gt;setActionName(<span class="php-var">$info</span>[<span class="php-quote">'filename'</span>]);
-</span><span id="48" class="l"><a href="#48">48: </a>        } <span class="php-keyword1">else</span> {
-</span><span id="49" class="l"><a href="#49">49: </a>            <span class="php-comment">// Send to a 404</span>
-</span><span id="50" class="l"><a href="#50">50: </a>            <span class="php-var">$dispatcher</span>-&gt;setControllerName(<span class="php-quote">'error'</span>);
-</span><span id="51" class="l"><a href="#51">51: </a>            <span class="php-var">$dispatcher</span>-&gt;setActionName(<span class="php-quote">'show404'</span>);
-</span><span id="52" class="l"><a href="#52">52: </a>        }
-</span><span id="53" class="l"><a href="#53">53: </a>    }
-</span><span id="54" class="l"><a href="#54">54: </a>}
-</span><span id="55" class="l"><a href="#55">55: </a></span></code></pre>
+</span><span id="45" class="l"><a href="#45">45: </a>        <span class="php-comment">// Get paths if router matched</span>
+</span><span id="46" class="l"><a href="#46">46: </a>        <span class="php-keyword1">if</span> (<span class="php-var">$router</span>-&gt;wasMatched()) {
+</span><span id="47" class="l"><a href="#47">47: </a>            <span class="php-var">$paths</span> = <span class="php-var">$router</span>-&gt;getMatchedRoute()-&gt;getPaths();
+</span><span id="48" class="l"><a href="#48">48: </a>        }
+</span><span id="49" class="l"><a href="#49">49: </a>
+</span><span id="50" class="l"><a href="#50">50: </a>        <span class="php-comment">// Attempt to redirect to a controller &amp; action</span>
+</span><span id="51" class="l"><a href="#51">51: </a>        <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$paths</span>) &amp;&amp; <span class="php-keyword2">is_string</span>(<span class="php-var">$paths</span>[<span class="php-quote">'controller'</span>])) {
+</span><span id="52" class="l"><a href="#52">52: </a>            <span class="php-var">$dispatcher</span>-&gt;setModuleName(<span class="php-var">$paths</span>[<span class="php-quote">'module'</span>]);
+</span><span id="53" class="l"><a href="#53">53: </a>            <span class="php-var">$dispatcher</span>-&gt;setNamespaceName(<span class="php-var">$paths</span>[<span class="php-quote">'namespace'</span>]);
+</span><span id="54" class="l"><a href="#54">54: </a>            <span class="php-var">$dispatcher</span>-&gt;setControllerName(<span class="php-var">$paths</span>[<span class="php-quote">'controller'</span>]);
+</span><span id="55" class="l"><a href="#55">55: </a>            <span class="php-var">$dispatcher</span>-&gt;setActionName(<span class="php-var">$paths</span>[<span class="php-quote">'action'</span>]);
+</span><span id="56" class="l"><a href="#56">56: </a>        } <span class="php-keyword1">else</span> <span class="php-keyword1">if</span> (<span class="php-var">$post</span>) {
+</span><span id="57" class="l"><a href="#57">57: </a>            <span class="php-comment">// Set the correct controller &amp; action</span>
+</span><span id="58" class="l"><a href="#58">58: </a>            <span class="php-var">$dispatcher</span>-&gt;setControllerName(<span class="php-var">$post</span>-&gt;post_type);
+</span><span id="59" class="l"><a href="#59">59: </a>
+</span><span id="60" class="l"><a href="#60">60: </a>            <span class="php-comment">// Retrieve page slug, taxonomy or single action</span>
+</span><span id="61" class="l"><a href="#61">61: </a>            <span class="php-keyword1">if</span> (!<span class="php-keyword1">empty</span>(<span class="php-var">$template</span> = get_page_template_slug(<span class="php-var">$post</span>-&gt;ID))) {
+</span><span id="62" class="l"><a href="#62">62: </a>                <span class="php-var">$dispatcher</span>-&gt;setActionName(
+</span><span id="63" class="l"><a href="#63">63: </a>                    <span class="php-keyword2">str_replace</span>(<span class="php-quote">'.php'</span>, <span class="php-quote">''</span>, get_page_template_slug(<span class="php-var">$post</span>-&gt;ID))
+</span><span id="64" class="l"><a href="#64">64: </a>                );
+</span><span id="65" class="l"><a href="#65">65: </a>            } <span class="php-keyword1">else</span> {
+</span><span id="66" class="l"><a href="#66">66: </a>                <span class="php-var">$dispatcher</span>-&gt;setActionName(
+</span><span id="67" class="l"><a href="#67">67: </a>                    is_post_type_archive(<span class="php-var">$post</span>-&gt;post_type)? <span class="php-quote">'index'</span> : <span class="php-quote">'single'</span>
+</span><span id="68" class="l"><a href="#68">68: </a>                );
+</span><span id="69" class="l"><a href="#69">69: </a>            }
+</span><span id="70" class="l"><a href="#70">70: </a>        }
+</span><span id="71" class="l"><a href="#71">71: </a>    }
+</span><span id="72" class="l"><a href="#72">72: </a>}
+</span><span id="73" class="l"><a href="#73">73: </a></span></code></pre>
 
 	<div id="footer">
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
@@ -196,6 +215,6 @@
 </div>
 </div>
 <script src="resources/combined.js?cd021bc814832c24a7cec5319ea03335bfba1caf"></script>
-<script src="elementlist.js?3057ba21d902ff845fb7fab756da4e10339a673e"></script>
+<script src="elementlist.js?a50d345e4e6ad559e0a0924c263a865dac20631d"></script>
 </body>
 </html>
