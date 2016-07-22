@@ -32,6 +32,20 @@ if (!function_exists('get_page_template_slug')) {
         return 'index';
     }
 }
-require_once __DIR__ . '/assets/wp-config.php';
 
+if (!function_exists('is_admin')) {
+    function is_admin()
+    {
+        return false;
+    }
+}
+
+if (!function_exists('url_to_postid')) {
+    function url_to_postid()
+    {
+        return 1;
+    }
+}
+
+require_once __DIR__ . '/assets/wp-config.php';
 require_once __DIR__ . '/../vendor/autoload.php';
