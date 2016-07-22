@@ -2,6 +2,10 @@
 
 ## 0.1.x
 
+0.1.4
+    - Application handles only outside of admin panel
+    - Improved dispatching
+
 0.1.3 (2016-07-18)
     - Added model class for media posts
     - Added getPermalink method for Posts model
