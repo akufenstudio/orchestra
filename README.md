@@ -16,13 +16,12 @@ To bootstrap Orchestra, add this to your `functions.php` file.
 
     // Bootstrap Orchestra
     require __DIR__ . '/vendor/autoload.php';
-    add_action('template_redirect', function() {
+    add_action('after_setup_theme', function() {
         $app = new \Akufen\Orchestra\Application();
         $app->handle();
-        exit;
     });
 
-This allows Orchestra to take over WordPress at the rendering level thus making it much faster and object-oriented. Application can be instantiated outside the action in order to register project specific services.
+This allows Orchestra to take over WordPress thus making it much faster and object-oriented. Application can be instantiated outside the action in order to register project specific services.
 
 ## Resources
 * Access the API indice [here](http://akufenstudio.github.io/orchestra/).
