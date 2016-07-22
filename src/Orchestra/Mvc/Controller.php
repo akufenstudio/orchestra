@@ -17,6 +17,7 @@
 
 namespace Akufen\Orchestra\Mvc;
 
+use Akufen\Orchestra\Services\Dispatcher;
 use Akufen\Orchestra\Mvc\Models\Posts;
 
 /**
@@ -36,7 +37,8 @@ class Controller extends \Phalcon\Mvc\Controller
      */
     protected function initialize()
     {
-        global $post;
+
+        $post = Dispatcher::$post;
 
         // Create a post model for controller use
         if (isset($post)) {

@@ -17,6 +17,8 @@
 
 namespace Akufen\Orchestra\Services;
 
+use Akufen\Orchestra\Mvc\Models\Posts;
+
 /**
  * Akufen\Orchestra\Dispatcher
  *
@@ -26,6 +28,9 @@ namespace Akufen\Orchestra\Services;
  */
 class Dispatcher extends \Phalcon\Mvc\User\Plugin
 {
+    /** @var \Akufen\Orchestra\Mvc\Models\Posts A post that match the request url. */
+    public static $post = null;
+
     /**
      * Attempts to find a controller & action that matches the request.
      *
@@ -35,8 +40,12 @@ class Dispatcher extends \Phalcon\Mvc\User\Plugin
      */
     public function beforeDispatchLoop(\Phalcon\Events\Event $event, \Phalcon\Mvc\Dispatcher $dispatcher)
     {
-        global $post;
+        // Require some services
         $router = $this->getDI()->getRouter();
+        $request = $this->getDI()->getRequest();
+
+        // Build the fully qualified url
+        $url = 'http://' . $request->getHttpHost() . $request->getUri();
 
         // Send to a 404 by default
         $dispatcher->setControllerName('error');
@@ -53,19 +62,33 @@ class Dispatcher extends \Phalcon\Mvc\User\Plugin
             $dispatcher->setNamespaceName($paths['namespace']);
             $dispatcher->setControllerName($paths['controller']);
             $dispatcher->setActionName($paths['action']);
-        } else if ($post) {
+        } else if (($postId = url_to_postid($url)) > 0) {
+            // Retrive the post from the matched id
+            static::$post = Posts::findFirst(array("ID = '{$postId}'"));
+
             // Set the correct controller & action
-            $dispatcher->setControllerName($post->post_type);
+            $dispatcher->setControllerName(static::$post->getPostType());
 
             // Retrieve page slug, taxonomy or single action
-            if (!empty($template = get_page_template_slug($post->ID))) {
-                $dispatcher->setActionName(
-                    str_replace('.php', '', get_page_template_slug($post->ID))
-                );
+            $template = get_page_template_slug(static::$post->get('ID'));
+            if (!empty($template)) {
+                $dispatcher->setActionName(str_replace('.php', '', $template));
             } else {
                 $dispatcher->setActionName(
-                    is_post_type_archive($post->post_type)? 'index' : 'single'
+                    is_post_type_archive(static::$post->getPostType())?
+                        'index' : 'single'
                 );
+            }
+        } else {
+            global $wp_rewrite;
+
+            // Attempt to match a custom post type archive
+            foreach ($wp_rewrite->extra_permastructs as $postType => $params) {
+                $slug = rtrim($request->getUri(), '/');
+                if (preg_match("{$slug}\/\%{$postType}\%/", $params['struct'])) {
+                    $dispatcher->setControllerName($postType);
+                    $dispatcher->setActionName('index');
+                }
             }
         }
     }
