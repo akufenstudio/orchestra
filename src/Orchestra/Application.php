@@ -100,9 +100,6 @@ class Application extends \Phalcon\Mvc\Application
                 );
             }
 
-            // Remove trailing slashes from our uris
-            $router->removeExtraSlashes(true);
-
             // Iterate and mount router groups from the configuration
             if (isset($config->application->routers)) {
                 foreach ($config->application->routers as $info) {
@@ -180,10 +177,14 @@ class Application extends \Phalcon\Mvc\Application
      */
     public function handle($uri = null)
     {
+        global $pagenow;
+
         // Set the data url for the router
         $_GET['_url'] = ($uri)? $uri : $this->di->getRequest()->getUri();
 
         // Handle the request & paste rendered html
-        echo parent::handle()->getContent();
+        if (!is_admin() && $pagenow !== 'wp-login.php') {
+            exit(parent::handle()->getContent());
+        }
     }
 }
