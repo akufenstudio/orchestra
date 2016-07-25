@@ -5,6 +5,9 @@ php:
 
 sudo: false
 
+services:
+  - mysql
+
 cache:
   directories:
     - vendor
@@ -14,6 +17,8 @@ cache:
 before_install:
   - travis_retry composer self-update
   - composer install --prefer-dist --no-interaction
+  - mysql -e "create database IF NOT EXISTS orchestra;" -uroot
+  - gunzip < tests/assets/orchestra.sql.gz | mysql orchestra -uroot
   - vendor/bin/install-phalcon.sh
 
 script:
