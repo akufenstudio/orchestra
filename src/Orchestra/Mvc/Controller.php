@@ -37,11 +37,11 @@ class Controller extends \Phalcon\Mvc\Controller
      */
     protected function initialize()
     {
-
+        // Retrieve the post from the dispatcher
         $post = Dispatcher::$post;
 
         // Create a post model for controller use
-        if (isset($post)) {
+        if ($post) {
             $this->post = new Posts();
             $this->post->fromObject($post);
         }

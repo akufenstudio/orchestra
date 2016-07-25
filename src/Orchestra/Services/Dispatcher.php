@@ -64,7 +64,9 @@ class Dispatcher extends \Phalcon\Mvc\User\Plugin
             $dispatcher->setActionName($paths['action']);
         } else if (($postId = url_to_postid($url)) > 0) {
             // Retrive the post from the matched id
-            static::$post = Posts::findFirst(array("ID = '{$postId}'"));
+            if (!static::$post = Posts::findFirst(array("ID = '{$postId}'"))) {
+                return;
+            }
 
             // Set the correct controller & action
             $dispatcher->setControllerName(static::$post->getPostType());
