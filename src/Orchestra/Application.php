@@ -93,6 +93,9 @@ class Application extends \Phalcon\Mvc\Application
             // Create the main router
             $router = new \Phalcon\Mvc\Router();
 
+            // Remove route extra slashes
+            $router->removeExtraSlashes(true);
+
             // Add a default module if specified
             if (isset($config->application->defaultModule)) {
                 $router->setDefaultModule(
