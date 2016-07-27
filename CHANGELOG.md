@@ -4,7 +4,7 @@
 
 0.1.4
     - Application handles only outside of admin panel
-    - Improved dispatching
+    - Improved dispatching (Custom permalinks & custom post types)
 
 0.1.3 (2016-07-18)
     - Added model class for media posts

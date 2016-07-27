@@ -84,12 +84,18 @@ class Dispatcher extends \Phalcon\Mvc\User\Plugin
         } else {
             global $wp_rewrite;
 
-            // Attempt to match a custom post type archive
-            foreach ($wp_rewrite->extra_permastructs as $postType => $params) {
+            // Attempt to match personalized url structure
+            if (preg_match('#^'.$request->getUri().'#', $wp_rewrite->front)) {
+                $dispatcher->setControllerName('post');
+                $dispatcher->setActionName('index');
+            } else {
+                // Attempt to match a custom post type archive
                 $slug = rtrim($request->getUri(), '/');
-                if (preg_match("{$slug}\/\%{$postType}\%/", $params['struct'])) {
-                    $dispatcher->setControllerName($postType);
-                    $dispatcher->setActionName('index');
+                foreach ($wp_rewrite->extra_permastructs as $postType => $params) {
+                    if (preg_match("{$slug}\/\%{$postType}\%/", $params['struct'])) {
+                        $dispatcher->setControllerName($postType);
+                        $dispatcher->setActionName('index');
+                    }
                 }
             }
         }
