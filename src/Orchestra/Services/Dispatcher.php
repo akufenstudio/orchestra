@@ -90,7 +90,7 @@ class Dispatcher extends \Phalcon\Mvc\User\Plugin
                 $dispatcher->setActionName('index');
             } else {
                 // Attempt to match a custom post type archive
-                $slug = rtrim($request->getUri(), '/');
+                $slug = strtok(rtrim($request->getUri(), '/'), '?');
                 foreach ($wp_rewrite->extra_permastructs as $postType => $params) {
                     if (preg_match("{$slug}\/\%{$postType}\%/", $params['struct'])) {
                         $dispatcher->setControllerName($postType);
