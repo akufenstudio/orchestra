@@ -122,7 +122,8 @@ class Application extends \Phalcon\Mvc\Application
                     'host' => DB_HOST,
                     'username' => DB_USER,
                     'password' => DB_PASSWORD,
-                    'dbname' => DB_NAME
+                    'dbname' => DB_NAME,
+                    'charset' => DB_CHARSET
                 )
             );
         });
