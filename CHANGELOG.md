@@ -6,6 +6,7 @@
     - Application handles only outside of admin panel
     - Improved dispatching (Custom permalinks & custom post types)
     - Override WordPress status code to allow user to decide
+    - Using WordPress default charset
 
 0.1.3 (2016-07-18)
     - Added model class for media posts
