@@ -47,5 +47,12 @@ if (!function_exists('url_to_postid')) {
     }
 }
 
+if (!function_exists('status_header')) {
+    function status_header($code)
+    {
+        return 1;
+    }
+}
+
 require_once __DIR__ . '/assets/wp-config.php';
 require_once __DIR__ . '/../vendor/autoload.php';
