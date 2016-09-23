@@ -11,7 +11,7 @@
  * @copyright Akufen Atelier Creatif
  * @author    Nicholas Charbonneau <nicholas@akufen.ca>
  * @license   http://opensource.org/licenses/MIT
- * @version   0.1.4
+ * @version   0.1.3
  * @link      https://github.com/akufenstudio/orchestra
  */
 
@@ -64,7 +64,7 @@ class Dispatcher extends \Phalcon\Mvc\User\Plugin
             $dispatcher->setActionName($paths['action']);
         } else if (($postId = url_to_postid($url)) > 0) {
             // Retrive the post from the matched id
-            if (!static::$post = Posts::findFirst(array("ID = '{$postId}'"))) {
+            if (!static::$post = Posts::findFirst(array("ID = '{$postId}' AND post_status = 'publish'"))) {
                 return;
             }
 

@@ -2,6 +2,9 @@
 
 ## 0.1.x
 
+0.1.5
+    - Dispatch only published posts
+
 0.1.4
     - Application handles only outside of admin panel
     - Improved dispatching (Custom permalinks & custom post types)
