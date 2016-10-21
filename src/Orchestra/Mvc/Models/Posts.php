@@ -72,6 +72,15 @@ class Posts extends \Akufen\Orchestra\Mvc\Model
     }
 
     /**
+     * Function to get the post's id.
+     *
+     * @return int $id The post's id.
+     */
+    public function getId(){
+        return $this->ID;
+    }
+
+    /**
      * Retrieve the post's permalink.
      *
      * @return string $permalink The post's permalink.
@@ -79,5 +88,18 @@ class Posts extends \Akufen\Orchestra\Mvc\Model
     public function getPermalink()
     {
         return get_permalink($this->ID);
+    }
+
+    /**
+     * Function to set the post's id.
+     *
+     * @return boolean True if the id has been updated.
+     */
+    public function setId($id){
+        if(!is_int($id))
+            return false;
+
+        $this->ID = $id;
+        return true;
     }
 }
