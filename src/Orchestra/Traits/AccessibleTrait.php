@@ -68,6 +68,8 @@ trait AccessibleTrait
     {
         $name = strval($name);
 
+        // Setting the property to null first because Phalcon converts array keys to properties
+        $this->$name = null;
         $this->$name = $value;
     }
 
