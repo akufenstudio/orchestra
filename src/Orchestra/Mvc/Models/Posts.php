@@ -76,7 +76,8 @@ class Posts extends \Akufen\Orchestra\Mvc\Model
      *
      * @return int $id The post's id.
      */
-    public function getId(){
+    public function getId()
+    {
         return $this->ID;
     }
 
@@ -95,9 +96,11 @@ class Posts extends \Akufen\Orchestra\Mvc\Model
      *
      * @return boolean True if the id has been updated.
      */
-    public function setId($id){
-        if(!is_int($id))
+    public function setId($id)
+    {
+        if (!is_int($id)) {
             return false;
+        }
 
         $this->ID = $id;
         return true;
