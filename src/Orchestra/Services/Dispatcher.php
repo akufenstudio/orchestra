@@ -74,7 +74,7 @@ class Dispatcher extends \Phalcon\Mvc\User\Plugin
             $dispatcher->setControllerName(static::$post->getPostType());
 
             // Retrieve page slug, taxonomy or single action
-            $template = get_page_template_slug(static::$post->get('ID'));
+            $template = get_page_template_slug(static::$post->getId());
             if (!empty($template)) {
                 $dispatcher->setActionName(str_replace('.php', '', $template));
             } else {
