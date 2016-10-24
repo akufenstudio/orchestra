@@ -4,6 +4,7 @@
 
 0.1.5
     - Dispatch only published posts
+    - Fixed glitch when a property's value is null would throw an exception
 
 0.1.4
     - Application handles only outside of admin panel
