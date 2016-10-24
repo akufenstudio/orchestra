@@ -21,9 +21,10 @@
 
 namespace Akufen\Orchestra\Tests\Helpers;
 
+use PHPUnit\Framework\TestCase;
 use Akufen\Orchestra\Helpers\Strings;
 
-class StringsTest extends \PHPUnit_Framework_TestCase
+class StringsTest extends TestCase
 {
     /**
      * Test underscored function

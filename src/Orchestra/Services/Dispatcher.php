@@ -64,7 +64,9 @@ class Dispatcher extends \Phalcon\Mvc\User\Plugin
             $dispatcher->setActionName($paths['action']);
         } else if (($postId = url_to_postid($url)) > 0) {
             // Retrive the post from the matched id
-            if (!static::$post = Posts::findFirst(array("ID = '{$postId}' AND post_status = 'publish'"))) {
+            if (!static::$post = Posts::findFirst(array(
+                "ID = '{$postId}' AND post_status = 'publish'"
+            ))) {
                 return;
             }
 

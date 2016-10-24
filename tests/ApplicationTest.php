@@ -17,9 +17,10 @@
 
 namespace Akufen\Orchestra\Tests;
 
-use \Akufen\Orchestra\Application;
+use PHPUnit\Framework\TestCase;
+use Akufen\Orchestra\Application;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase
+class ApplicationTest extends TestCase
 {
     /**
      * Application tests setup
@@ -99,20 +100,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('error', $dispatcher->getControllerName());
         $this->assertEquals('show404', $dispatcher->getActionName());
 
-        // Simulate wordpress behavior
-        $GLOBALS['post'] = new \stdClass();
-        $GLOBALS['post']->ID = 0;
-        $GLOBALS['post']->post_type = 'index';
-
-        // Simulate before dispatch loop event again
-        $dispatcher->getEventsManager()->fire(
-            'dispatch:beforeDispatchLoop',
-            $dispatcher
-        );
-
-        // Dispatch environment should match
-        $this->assertEquals('index', $dispatcher->getControllerName());
-        $this->assertEquals('index', $dispatcher->getActionName());
+        // TODO: Simulate correctly url_to_postid
+        // Figure out a way to find a post in the db
 
         // TODO: Test static routes environment.
         // I haven't been able to reproduce an
