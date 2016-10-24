@@ -61,18 +61,6 @@ class ModelTest extends TestCase
     }
 
     /**
-     * Test the setter for the ID property.
-     */
-    public function testSetId()
-    {
-        // Initialize
-        $this->model->setId(54);
-
-        // Setting the ID property should work
-        $this->assertEquals(54, $this->model->ID);
-    }
-
-    /**
      * Test assignable from object trait.
      * TODO: Extend testing, test behaviour with numerical array.
      */
