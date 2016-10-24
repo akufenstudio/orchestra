@@ -27,6 +27,9 @@ namespace Akufen\Orchestra\Mvc\Models;
  */
 class Posts extends \Akufen\Orchestra\Mvc\Model
 {
+    /** @var int The id of the post. */
+    public $ID = null;
+
     /**
      * Initialize a post's source & relationships
      *
