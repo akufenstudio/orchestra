@@ -4,6 +4,7 @@
 
 0.1.5
     - Dispatch only published posts
+    - Fixed preventing Phalcon models to assign key values to properties
 
 0.1.4
     - Application handles only outside of admin panel
