@@ -4,8 +4,8 @@
 
 ### 0.1.5
 - Dispatch only published posts
-- Added ID getter and setter for Posts 
-- Fixed preventing Phalcon models to assign key values to properties 
+- Added ID getter and setter for Posts
+- Fixed preventing Phalcon models to assign key values to properties
 - Fixed glitch when a property's value is null would throw an exception
 
 ### 0.1.4
