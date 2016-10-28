@@ -29,6 +29,9 @@ class Posts extends \Akufen\Orchestra\Mvc\Model
 {
     /** @var int The id of the post. */
     public $ID = null;
+    
+    /** @var string The permalink of the post. */
+    public $permalink = null;
 
     /**
      * Initialize a post's source & relationships
@@ -91,7 +94,11 @@ class Posts extends \Akufen\Orchestra\Mvc\Model
      */
     public function getPermalink()
     {
-        return get_permalink($this->ID);
+        if ($this->permalink == null) {
+            $this->permalink = get_permalink($this->ID);
+        }
+
+        return $this->permalink;
     }
 
     /**
