@@ -38,7 +38,7 @@ trait AccessibleTrait
     public function __call($method, $value = null)
     {
         // Handle a get method on a service
-        if (preg_match('/^get/', $method)) {
+        if (strpos($method, 'get') === 0) {
             $property = lcfirst(substr($method, 3));
             if (!isset($this->{$property})) {
                 $property = Strings::toUnderscores($property);
@@ -47,7 +47,7 @@ trait AccessibleTrait
         }
 
         // Handle a set method on a service
-        if (preg_match('/^set/', $method)) {
+        if (strpos($method, 'set') === 0) {
             if (is_array($value) && !empty($value)) {
                 $this->set(lcfirst(substr($method, 3)), $value[0]);
             }
