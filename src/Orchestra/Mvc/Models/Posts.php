@@ -24,12 +24,79 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses    \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_posts")
  */
 class Posts extends \Akufen\Orchestra\Mvc\Model
 {
-    /** @var int The id of the post. */
+    /** @Id @Column(type="integer") @GeneratedValue **/
     public $ID = null;
-    
+
+    /** @Column(type="integer") */
+    public $post_author;
+
+    /** @Column(type="datetime") */
+    public $post_date;
+
+    /** @Column(type="datetime") */
+    public $post_date_gmt;
+
+    /** @Column(type="text") */
+    public $post_content;
+
+    /** @Column(type="string") */
+    public $post_title;
+
+    /** @Column(type="text") */
+    public $post_excerpt;
+
+    /** @Column(type="string") */
+    public $post_status;
+
+    /** @Column(type="string") */
+    public $comment_status;
+
+    /** @Column(type="string") */
+    public $ping_status;
+
+    /** @Column(type="string") */
+    public $post_password;
+
+    /** @Column(type="string") */
+    public $post_name;
+
+    /** @Column(type="text") */
+    public $to_ping;
+
+    /** @Column(type="text") */
+    public $pinged;
+
+    /** @Column(type="datetime") */
+    public $post_modified;
+
+    /** @Column(type="datetime") */
+    public $post_modified_gmt;
+
+    /** @Column(type="text") */
+    public $post_content_filtered;
+
+    /** @Column(type="integer") */
+    public $post_parent;
+
+    /** @Column(type="string") */
+    public $guid;
+
+    /** @Column(type="integer") */
+    public $menu_order;
+
+    /** @Column(type="string") */
+    public $post_type;
+
+    /** @Column(type="string") */
+    public $post_mime_type;
+
+    /** @Column(type="integer") */
+    public $comment_count;
+
     /** @var string The permalink of the post. */
     public $permalink = null;
 
@@ -38,44 +105,44 @@ class Posts extends \Akufen\Orchestra\Mvc\Model
      *
      * @return void
      */
-    public function initialize()
-    {
-        global $table_prefix;
+    /*public function initialize()*/
+    //{
+        //global $table_prefix;
 
-        $this->setSource($table_prefix . 'posts');
+        //$this->setSource($table_prefix . 'posts');
 
-        // Posts belong to an author
-        $this->belongsTo(
-            'post_author',
-            'Akufen\Orchestra\Mvc\Models\Users',
-            'ID',
-            array('alias' => 'postAuthor')
-        );
+        //// Posts belong to an author
+        //$this->belongsTo(
+            //'post_author',
+            //'Akufen\Orchestra\Mvc\Models\Users',
+            //'ID',
+            //array('alias' => 'postAuthor')
+        //);
 
-        // Posts may have parent posts
-        $this->belongsTo(
-            'post_parent',
-            'Akufen\Orchestra\Mvc\Models\Posts',
-            'ID',
-            array('alias' => 'postParent')
-        );
+        //// Posts may have parent posts
+        //$this->belongsTo(
+            //'post_parent',
+            //'Akufen\Orchestra\Mvc\Models\Posts',
+            //'ID',
+            //array('alias' => 'postParent')
+        //);
 
-        // Posts have many post metas
-        $this->hasMany(
-            'ID',
-            'Akufen\Orchestra\Mvc\Models\PostMeta',
-            'post_id',
-            array('alias' => 'metas')
-        );
+        //// Posts have many post metas
+        //$this->hasMany(
+            //'ID',
+            //'Akufen\Orchestra\Mvc\Models\PostMeta',
+            //'post_id',
+            //array('alias' => 'metas')
+        //);
 
-        // Posts have many term relationships
-        $this->hasMany(
-            'ID',
-            'Akufen\Orchestra\Mvc\Models\TermRelationships',
-            'object_id',
-            array('alias' => 'termRelationships')
-        );
-    }
+        //// Posts have many term relationships
+        //$this->hasMany(
+            //'ID',
+            //'Akufen\Orchestra\Mvc\Models\TermRelationships',
+            //'object_id',
+            //array('alias' => 'termRelationships')
+        //);
+    /*}*/
 
     /**
      * Function to get the post's id.

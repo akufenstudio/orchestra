@@ -17,6 +17,9 @@
 
 namespace Akufen\Orchestra;
 
+use Akufen\Orchestra\Services\Configuration;
+use Akufen\Orchestra\Services\Dispatcher;
+
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,33 +47,37 @@ class Application
         $container = new ContainerBuilder();
 
         // Register the configuration service
-        $container->register('config', '\Akufen\Orchestra\Services\Configuration');
-
-        // Retrieve our configuration
-        $config = $container->get('config');
+        $config = new Configuration();
+        $container->set('config', $config);
 
         // Register the dispatching service
-        $container->register('dispatcher', '\Akufen\Orchestra\Services\Dispatcher')
+        $dispatcher = new Dispatcher();
+        $container->register('dispatcher', $dispatcher)
             ->addMethodCall('setContainer', array($container));
 
         // Register the request service
-        $container->register('request', Request::createFromGlobals());
+        $container->set('request', Request::createFromGlobals());
 
         // Register the database service
-        $container->register('database', EntityManager::create(
+        $container->set('database', EntityManager::create(
             array(
                 'driver' => 'pdo_mysql',
                 'user' => DB_USER,
                 'password' => DB_PASSWORD,
                 'dbname' => DB_NAME,
+                'charset' => DB_CHARSET
             ),
             Setup::createAnnotationMetadataConfiguration(
-                __DIR__ . '/Mvc/Models',
+                array(__DIR__ . '/Mvc/Models'),
                 !$config->getApplication()['production']
             )
         ));
 
-                // Report all errors in development mode
+        $entityManager = $container->get('database');
+        $a = $entityManager->getRepository('\\Akufen\\Orchestra\\Mvc\\Models\\Posts');
+        var_dump($a->findAll()); die;
+
+        // Report all errors in development mode
         if (!$config->getApplication()['production'] === true) {
             error_reporting(E_ALL);
         }

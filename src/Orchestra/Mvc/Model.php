@@ -17,16 +17,18 @@
 
 namespace Akufen\Orchestra\Mvc;
 
+use Akufen\Orchestra\Traits\AccessibleTrait;
+use Akufen\Orchestra\Traits\AssignableTrait;
+
 /**
  * Akufen\Orchestra\Mvc\Model
  *
  * Default model class.
  *
  * @package Models
- * @uses    \Phalcon\Mvc\Model
  */
-class Model extends \Phalcon\Mvc\Model
+class Model
 {
-    use \Akufen\Orchestra\Traits\AccessibleTrait;
-    use \Akufen\Orchestra\Traits\AssignableTrait;
+    use AccessibleTrait;
+    use AssignableTrait;
 }
