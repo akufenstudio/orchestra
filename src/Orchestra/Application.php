@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Orchestra: A minimalist object-oriented superset for WordPress using Phalcon.
+ * Orchestra: A minimalist object-oriented superset for WordPress using Symfony.
  *
  * This source file is subject to the MIT license that is bundled
  * with this package in the file LICENSE and is available through
@@ -11,11 +11,15 @@
  * @copyright Akufen Atelier Creatif
  * @author    Nicholas Charbonneau <nicholas@akufen.ca>
  * @license   http://opensource.org/licenses/MIT
- * @version   0.1.5
+ * @version   0.2.0
  * @link      https://github.com/akufenstudio/orchestra
  */
 
 namespace Akufen\Orchestra;
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Akufen\Orchestra\Application
@@ -24,153 +28,93 @@ namespace Akufen\Orchestra;
  *
  * @package Orchestra
  */
-class Application extends \Phalcon\Mvc\Application
+class Application
 {
+    use ContainerAwareTrait;
+
     /**
-     * {@inheritdoc}
+     * Application class constructor
      */
     public function __construct()
     {
-        // Create dependency injector
-        $di = new \Phalcon\DI\FactoryDefault();
+        // Create dependency injector container
+        $container = new ContainerBuilder();
 
-        // Configuration file
-        $di->setShared('config', function () {
+        // Register the configuration service
+        $container->register('config', '\Akufen\Orchestra\Services\Configuration');
 
-            // Prepare the configuration filename
-            $file = get_template_directory() . '/config.php';
+        // Register the dispatching service
+        $container->register('dispatcher', '\Akufen\Orchestra\Services\Dispatcher')
+            ->addMethodCall('setContainer', array($container));
 
-            // Configuration is mandatory
-            if (!file_exists($file)) {
-                throw new \Exception('Unable to locate configuration file.');
-            }
+        // Register the request service
+        $container->register('request', Request::createFromGlobals());
 
-            return include $file;
-        });
+        // Retrieve our configuration
+        $config = $container->get('config');
 
-        // Retrieve instance of configuration
-        $config = $di->getConfig();
-
-        // Set development flags
-        if (!$config->application->production) {
-            // Report all error
+        // Report all errors in development mode
+        if (!$config->getApplication()['production'] === true) {
             error_reporting(E_ALL);
-
-            // Create a new debug listener
-            $debug = new \Phalcon\Debug();
-            $debug->listen();
         }
 
-        // Url service configuration
-        $di->setShared('url', function () use ($config) {
 
-            // Create url service with configuration base uri
-            $url = new \Phalcon\Mvc\Url();
+        // TODO: Create router, database services
 
-            // Prepare the base uri for our application
-            $baseUri = isset($config->application->baseUri)?
-                $config->application->baseUri : '/';
+        //// Session service configuration
+        //$di->setShared('session', function () {
 
-            // Set the base uri
-            $url->setBaseUri($baseUri);
+            //// Create session adapter and start it
+            //$session = new \Phalcon\Session\Adapter\Files();
+            //$session->start();
 
-            return $url;
-        });
+            //return $session;
+        //});
 
-        // Session service configuration
-        $di->setShared('session', function () {
+        //// Configure router
+        //$di->setShared('router', function () use ($config) {
 
-            // Create session adapter and start it
-            $session = new \Phalcon\Session\Adapter\Files();
-            $session->start();
+            //// Create the main router
+            //$router = new \Phalcon\Mvc\Router();
 
-            return $session;
-        });
+            //// Remove route extra slashes
+            //$router->removeExtraSlashes(true);
 
-        // Configure router
-        $di->setShared('router', function () use ($config) {
+            //// Add a default module if specified
+            //if (isset($config->application->defaultModule)) {
+                //$router->setDefaultModule(
+                    //$config->application->defaultModule
+                //);
+            //}
 
-            // Create the main router
-            $router = new \Phalcon\Mvc\Router();
+            //// Iterate and mount router groups from the configuration
+            //if (isset($config->application->routers)) {
+                //foreach ($config->application->routers as $info) {
+                    //include_once get_template_directory() . '/' . $info->path;
+                    //$group = new $info->className;
+                    //$router->mount($group);
+                //}
+            //}
 
-            // Remove route extra slashes
-            $router->removeExtraSlashes(true);
+            //return $router;
+        //});
 
-            // Add a default module if specified
-            if (isset($config->application->defaultModule)) {
-                $router->setDefaultModule(
-                    $config->application->defaultModule
-                );
-            }
+        //// Database configuration
+        //$di->setShared('db', function () {
+            //return new \Phalcon\Db\Adapter\Pdo\Mysql(
+                //array(
+                    //'host' => DB_HOST,
+                    //'username' => DB_USER,
+                    //'password' => DB_PASSWORD,
+                    //'dbname' => DB_NAME,
+                    //'charset' => DB_CHARSET
+                //)
+            //);
+        //});
 
-            // Iterate and mount router groups from the configuration
-            if (isset($config->application->routers)) {
-                foreach ($config->application->routers as $info) {
-                    include_once get_template_directory() . '/' . $info->path;
-                    $group = new $info->className;
-                    $router->mount($group);
-                }
-            }
+        // Set the application dependency injector
+        $this->setContainer($container);
 
-            return $router;
-        });
-
-        // Database configuration
-        $di->setShared('db', function () {
-            return new \Phalcon\Db\Adapter\Pdo\Mysql(
-                array(
-                    'host' => DB_HOST,
-                    'username' => DB_USER,
-                    'password' => DB_PASSWORD,
-                    'dbname' => DB_NAME,
-                    'charset' => DB_CHARSET
-                )
-            );
-        });
-
-        // Dispatcher configuration
-        $di->setShared('dispatcher', function () use ($di, $config) {
-
-            // Add a custom dispatcher to the dispatch loop
-            $customDispatcher = new \Akufen\Orchestra\Services\Dispatcher();
-            $eventsManager = $di->getEventsManager();
-            $eventsManager->attach('dispatch', $customDispatcher);
-
-            // Create default dispatcher and attach custom events
-            $dispatcher = new \Phalcon\Mvc\Dispatcher();
-            $dispatcher->setDefaultNamespace($config->application->defaultNamespace);
-            $dispatcher->setEventsManager($eventsManager);
-
-            return $dispatcher;
-        });
-
-        // Modules configuration
-        $di->set('modules', function () use ($config) {
-
-            // Initialize modules array
-            $modules = array();
-
-            foreach ($config->modules->toArray() as $module) {
-                // Find out if the module is a composer package
-                $modulePath = substr($module['path'], 0, 1) == '/'?
-                get_template_directory() : get_template_directory() . '/vendor/';
-
-                // Add the module path
-                $modulePath .= $module['path'];
-
-                // Build the module configuration array
-                $modules[$module['name']] = array(
-                'className' => ucfirst($module['name']). '\\Module',
-                'path' => $modulePath . '/Module.php'
-                );
-            }
-
-            return $modules;
-        });
-
-        // Set the application dependency injector & register modules
-        $this->setDI($di);
-        $this->registerModules($di->getModules());
     }
 
     /**
@@ -184,12 +128,14 @@ class Application extends \Phalcon\Mvc\Application
         global $pagenow;
 
         // Set the data url for the router
-        $_GET['_url'] = ($uri)? $uri : $this->di->getRequest()->getUri();
+        if($uri === null) {
+            $uri = $this->container->get('request')->getPathInfo();
+        }
 
         // Handle the request & paste rendered html
         if (!is_admin() && $pagenow !== 'wp-login.php') {
             status_header(200);
-            echo parent::handle()->getContent();
+            var_dump($this->container->get('dispatcher')->handle($uri)); die;
         }
     }
 }

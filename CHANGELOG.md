@@ -2,11 +2,11 @@
 
 ## 0.1.x
 
-### 0.1.5
+### 0.2.0
 - Dispatch only published posts
 - Added ID getter and setter for Posts
 - Added permalink property to prevent multiple db acces
-- Fixed preventing Phalcon models to assign key values to properties
+- Fixed preventing Symfony models to assign key values to properties
 - Fixed glitch when a property's value is null would throw an exception
 
 ### 0.1.4

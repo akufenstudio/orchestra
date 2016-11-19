@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Orchestra: A minimalist object-oriented superset for WordPress using Phalcon.
+ * Orchestra: A minimalist object-oriented superset for WordPress using Symfony.
  *
  * This source file is subject to the MIT license that is bundled
  * with this package in the file LICENSE and is available through
@@ -11,7 +11,7 @@
  * @copyright   Akufen Atelier Creatif
  * @author      Nicholas Charbonneau <nicholas@akufen.ca>
  * @license     http://opensource.org/licenses/MIT
- * @version     0.1.5
+ * @version     0.2.0
  * @link        https://github.com/akufenstudio/orchestra
  */
 

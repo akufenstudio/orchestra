@@ -1,14 +1,14 @@
 # Orchestra
 
 [![Build Status](https://img.shields.io/travis/akufenstudio/orchestra/master.svg)](https://travis-ci.org/akufenstudio/orchestra)
-[![Latest Version](https://img.shields.io/badge/Latest%20Version-0.1.5-blue.svg)](https://packagist.org/packages/akufen/orchestra)
+[![Latest Version](https://img.shields.io/badge/Latest%20Version-0.2.0-blue.svg)](https://packagist.org/packages/akufen/orchestra)
 
 Orchestra is a minimalist object-oriented superset that uses [Phalcon](https://phalconphp.com/) as a framework to bootstrap [WordPress](https://wordpress.org/) with an MVC environment and Object-Relational Mapping.
 
 ## Installation
 Orchestra can be installed inside your theme with [Composer](https://getcomposer.org/) using this command:
 ```sh
-composer require akufen/orchestra v0.1.5
+composer require akufen/orchestra v0.2.0
 ```
 
 ## Usage

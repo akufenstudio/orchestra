@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Orchestra: A minimalist object-oriented superset for WordPress using Phalcon.
+ * Orchestra: A minimalist object-oriented superset for WordPress using Symfony.
  *
  * This source file is subject to the MIT license that is bundled
  * with this package in the file LICENSE and is available through
@@ -11,95 +11,55 @@
  * @copyright Akufen Atelier Creatif
  * @author    Nicholas Charbonneau <nicholas@akufen.ca>
  * @license   http://opensource.org/licenses/MIT
- * @version   0.1.3
+ * @version   0.2.0
  * @link      https://github.com/akufenstudio/orchestra
  */
 
 namespace Akufen\Orchestra\Services;
 
-use Akufen\Orchestra\Mvc\Models\Posts;
+use Akufen\Orchestra\Traits\AccessibleTrait;
+
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
- * Akufen\Orchestra\Dispatcher
+ * Akufen\Orchestra\Services\Dispatcher
  *
- * A custom dispatcher for WordPress architecture
+ * Orchestra application dispatching service.
  *
- * @package Services
+ * @package Orchestra
  */
-class Dispatcher extends \Phalcon\Mvc\User\Plugin
+class Dispatcher extends RouteCollection
 {
-    /** @var \Akufen\Orchestra\Mvc\Models\Posts A post that match the request url. */
-    public static $post = null;
+    use AccessibleTrait;
+    use ContainerAwareTrait;
 
     /**
-     * Attempts to find a controller & action that matches the request.
+     * Handle the current url and dispatch the controller.
      *
-     * @param  \Phalcon\Events\Event   $event      Contextual information of the event produced.
-     * @param  \Phalcon\Mvc\Dispatcher $dispatcher The dispatcher service.
+     * @param string $uri The uri that is being requested.
      * @return void
      */
-    public function beforeDispatchLoop(\Phalcon\Events\Event $event, \Phalcon\Mvc\Dispatcher $dispatcher)
+    public function handle($uri)
     {
-        // Require some services
-        $router = $this->getDI()->getRouter();
-        $request = $this->getDI()->getRequest();
+        // Retrieve our configuration
+        $config = $this->container->get('config');
 
-        // Build the fully qualified url
-        $url = 'http://' . $request->getHttpHost() . $request->getUri();
+        /*foreach($router->getRoutes() as $route) {*/
+            //$this->add($route['name'], $route);
+        /*}*/
 
-        // Send to a 404 by default
-        $dispatcher->setControllerName('error');
-        $dispatcher->setActionName('show404');
+        // Create a request context object
+        $context = new RequestContext(
+            $config->getApplication()['baseUri']
+        );
 
-        // Get paths if router matched
-        if ($router->wasMatched()) {
-            $paths = $router->getMatchedRoute()->getPaths();
-        }
+        // Create an url matcher based on context
+        $matcher = new UrlMatcher($routes, $context);
 
-        // Attempt to redirect to a controller & action
-        if (isset($paths) && is_string($paths['controller'])) {
-            $dispatcher->setModuleName($paths['module']);
-            $dispatcher->setNamespaceName($paths['namespace']);
-            $dispatcher->setControllerName($paths['controller']);
-            $dispatcher->setActionName($paths['action']);
-        } else if (($postId = url_to_postid($url)) > 0) {
-            // Retrive the post from the matched id
-            if (!static::$post = Posts::findFirst(array(
-                "ID = '{$postId}' AND post_status = 'publish'"
-            ))) {
-                return;
-            }
-
-            // Set the correct controller & action
-            $dispatcher->setControllerName(static::$post->getPostType());
-
-            // Retrieve page slug, taxonomy or single action
-            $template = get_page_template_slug(static::$post->getId());
-            if (!empty($template)) {
-                $dispatcher->setActionName(str_replace('.php', '', $template));
-            } else {
-                $dispatcher->setActionName(
-                    is_post_type_archive(static::$post->getPostType())?
-                        'index' : 'single'
-                );
-            }
-        } else {
-            global $wp_rewrite;
-
-            // Attempt to match personalized url structure
-            if (preg_match('#^'.$request->getUri().'#', $wp_rewrite->front)) {
-                $dispatcher->setControllerName('post');
-                $dispatcher->setActionName('index');
-            } else {
-                // Attempt to match a custom post type archive
-                $slug = strtok(rtrim($request->getUri(), '/'), '?');
-                foreach ($wp_rewrite->extra_permastructs as $postType => $params) {
-                    if (preg_match("{$slug}\/\%{$postType}\%/", $params['struct'])) {
-                        $dispatcher->setControllerName($postType);
-                        $dispatcher->setActionName('index');
-                    }
-                }
-            }
-        }
+        // Attempt to match a route
+        return $matcher->match($uri);
     }
 }
