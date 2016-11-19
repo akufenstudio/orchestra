@@ -149,37 +149,37 @@ class Posts extends \Akufen\Orchestra\Mvc\Model
      *
      * @return int $id The post's id.
      */
-    public function getId()
-    {
-        return $this->ID;
-    }
+    /*public function getId()*/
+    //{
+        //return $this->ID;
+    //}
 
     /**
      * Retrieve the post's permalink.
      *
      * @return string $permalink The post's permalink.
      */
-    public function getPermalink()
-    {
-        if ($this->permalink == null) {
-            $this->permalink = get_permalink($this->ID);
-        }
+    //public function getPermalink()
+    //{
+        //if ($this->permalink == null) {
+            //$this->permalink = get_permalink($this->ID);
+        //}
 
-        return $this->permalink;
-    }
+        //return $this->permalink;
+    //}
 
     /**
      * Function to set the post's id.
      *
      * @return boolean True if the id has been updated.
      */
-    public function setId($id)
-    {
-        if (!is_int($id)) {
-            return false;
-        }
+    //public function setId($id)
+    //{
+        //if (!is_int($id)) {
+            //return false;
+        //}
 
-        $this->ID = $id;
-        return true;
-    }
+        //$this->ID = $id;
+        //return true;
+    /*}*/
 }

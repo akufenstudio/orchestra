@@ -46,19 +46,16 @@ class Application
         // Create dependency injector container
         $container = new ContainerBuilder();
 
-        // Register the configuration service
+        // Register basic services
         $config = new Configuration();
         $container->set('config', $config);
-
-        // Register the dispatching service
-        $dispatcher = new Dispatcher();
-        $container->register('dispatcher', $dispatcher)
-            ->addMethodCall('setContainer', array($container));
-
-        // Register the request service
         $container->set('request', Request::createFromGlobals());
 
-        // Register the database service
+        // Register the request dispatcher
+        $container->register('dispatcher', new Dispatcher())
+            ->addMethodCall('setContainer', array($container));
+
+        // Register our entity manager
         $container->set('database', EntityManager::create(
             array(
                 'driver' => 'pdo_mysql',
@@ -73,66 +70,19 @@ class Application
             )
         ));
 
-        $entityManager = $container->get('database');
-        $a = $entityManager->getRepository('\\Akufen\\Orchestra\\Mvc\\Models\\Posts');
-        var_dump($a->findAll()); die;
-
         // Report all errors in development mode
         if (!$config->getApplication()['production'] === true) {
             error_reporting(E_ALL);
         }
 
-        // TODO: Create router, database services
-
-        //// Session service configuration
-        //$di->setShared('session', function () {
-
-            //// Create session adapter and start it
-            //$session = new \Phalcon\Session\Adapter\Files();
-            //$session->start();
-
-            //return $session;
-        //});
-
-        //// Configure router
-        //$di->setShared('router', function () use ($config) {
-
-            //// Create the main router
-            //$router = new \Phalcon\Mvc\Router();
-
-            //// Remove route extra slashes
-            //$router->removeExtraSlashes(true);
-
-            //// Add a default module if specified
-            //if (isset($config->application->defaultModule)) {
-                //$router->setDefaultModule(
-                    //$config->application->defaultModule
-                //);
-            //}
-
-            //// Iterate and mount router groups from the configuration
-            //if (isset($config->application->routers)) {
-                //foreach ($config->application->routers as $info) {
-                    //include_once get_template_directory() . '/' . $info->path;
-                    //$group = new $info->className;
-                    //$router->mount($group);
-                //}
-            //}
-
-            //return $router;
-        //});
-
-        //// Database configuration
-        //$di->setShared('db', function () {
-            //return new \Phalcon\Db\Adapter\Pdo\Mysql(
-                //array(
-                                    //)
-            //);
-        //});
-
         // Set the application dependency injector
         $this->setContainer($container);
 
+        // TODO: Delete these tests
+        $entityManager = $container->get('database');
+        $repo = $entityManager->getRepository(
+            '\\Akufen\\Orchestra\\Mvc\\Models\\Posts'
+        );
     }
 
     /**
@@ -153,7 +103,7 @@ class Application
         // Handle the request & paste rendered html
         if (!is_admin() && $pagenow !== 'wp-login.php') {
             status_header(200);
-            var_dump($this->container->get('dispatcher')->handle($uri)); die;
+            echo $this->container->get('dispatcher')->handle($uri);
         }
     }
 }
