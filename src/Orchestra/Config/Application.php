@@ -51,15 +51,9 @@ class Application implements ConfigurationInterface
                 ->isRequired()
                 ->defaultFalse()
                 ->end()
-            ->arrayNode('router')->children()
-                ->scalarNode('className')
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                    ->end()
-                ->scalarNode('path')
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                    ->end()
+            ->arrayNode('routes')
+                ->requiresAtLeastOneElement()
+                ->prototype('variable')
                 ->end()
             ->end();
 

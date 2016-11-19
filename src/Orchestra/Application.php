@@ -21,6 +21,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
+
 /**
  * Akufen\Orchestra\Application
  *
@@ -43,6 +46,9 @@ class Application
         // Register the configuration service
         $container->register('config', '\Akufen\Orchestra\Services\Configuration');
 
+        // Retrieve our configuration
+        $config = $container->get('config');
+
         // Register the dispatching service
         $container->register('dispatcher', '\Akufen\Orchestra\Services\Dispatcher')
             ->addMethodCall('setContainer', array($container));
@@ -50,14 +56,24 @@ class Application
         // Register the request service
         $container->register('request', Request::createFromGlobals());
 
-        // Retrieve our configuration
-        $config = $container->get('config');
+        // Register the database service
+        $container->register('database', EntityManager::create(
+            array(
+                'driver' => 'pdo_mysql',
+                'user' => DB_USER,
+                'password' => DB_PASSWORD,
+                'dbname' => DB_NAME,
+            ),
+            Setup::createAnnotationMetadataConfiguration(
+                __DIR__ . '/Mvc/Models',
+                !$config->getApplication()['production']
+            )
+        ));
 
-        // Report all errors in development mode
+                // Report all errors in development mode
         if (!$config->getApplication()['production'] === true) {
             error_reporting(E_ALL);
         }
-
 
         // TODO: Create router, database services
 
@@ -103,12 +119,7 @@ class Application
         //$di->setShared('db', function () {
             //return new \Phalcon\Db\Adapter\Pdo\Mysql(
                 //array(
-                    //'host' => DB_HOST,
-                    //'username' => DB_USER,
-                    //'password' => DB_PASSWORD,
-                    //'dbname' => DB_NAME,
-                    //'charset' => DB_CHARSET
-                //)
+                                    //)
             //);
         //});
 

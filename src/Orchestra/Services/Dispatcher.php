@@ -44,20 +44,19 @@ class Dispatcher extends RouteCollection
      */
     public function handle($uri)
     {
-        // Retrieve our configuration
-        $config = $this->container->get('config');
+        // Retrieve our application configuration
+        $appConfig = $this->container->get('config')->getApplication();
 
-        /*foreach($router->getRoutes() as $route) {*/
-            //$this->add($route['name'], $route);
-        /*}*/
+        // Create & register the application router
+        foreach($appConfig['routes'] as $name => $route) {
+            $this->add($name, $route);
+        }
 
         // Create a request context object
-        $context = new RequestContext(
-            $config->getApplication()['baseUri']
-        );
+        $context = new RequestContext($appConfig['baseUri']);
 
         // Create an url matcher based on context
-        $matcher = new UrlMatcher($routes, $context);
+        $matcher = new UrlMatcher($this, $context);
 
         // Attempt to match a route
         return $matcher->match($uri);
