@@ -19,6 +19,7 @@ namespace Akufen\Orchestra;
 
 use Akufen\Orchestra\Services\Configuration;
 use Akufen\Orchestra\Services\Dispatcher;
+use Akufen\Orchestra\Services\View;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -53,6 +54,10 @@ class Application
 
         // Register the request dispatcher
         $container->register('dispatcher', new Dispatcher())
+            ->addMethodCall('setContainer', array($container));
+
+        // Register the view rendering object
+        $container->register('view', new View())
             ->addMethodCall('setContainer', array($container));
 
         // Register our entity manager
