@@ -136,8 +136,9 @@ class Dispatcher extends RouteCollection
 
         // Create the controller and execute the action
         $controller = $config['namespace'].'\\'.$this->getControllerName();
-        $controller = new $controller();
+        $controller = new $controller($this->container);
         $controller->setContainer($this->container);
+        $controller->initialize();
         $controller->{$this->getActionName()}();
     }
 }

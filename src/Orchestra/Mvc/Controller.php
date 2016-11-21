@@ -17,7 +17,8 @@
 
 namespace Akufen\Orchestra\Mvc;
 
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Akufen\Orchestra\Services\Dispatcher;
 use Akufen\Orchestra\Mvc\Models\Posts;
@@ -30,14 +31,11 @@ use Akufen\Orchestra\Mvc\Models\Posts;
  * @uses    \Phalcon\Mvc\Controller
  * @package Mvc
  */
-class Controller
+class Controller implements ContainerAwareInterface
 {
-    use ContainerAwareTrait;
-
-
-    public function __construct()
+    public function setContainer(ContainerInterface $container = null)
     {
-        $this->initialize();
+        $this->container = $container;
     }
 
     /**
@@ -45,7 +43,7 @@ class Controller
      *
      * @return void
      */
-    protected function initialize()
+    public function initialize()
     {
         // Retrieve the post from the dispatcher
         $post = Dispatcher::$post;
