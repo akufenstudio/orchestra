@@ -36,6 +36,25 @@ class Dispatcher extends RouteCollection
     use AccessibleTrait;
     use ContainerAwareTrait;
 
+    /** @var \Akufen\Orchestra\Mvc\Models\Posts A post that match the request url. */
+    static $post;
+
+    /** @var string The name of the controller to dispatch. */
+    protected $controllerName;
+
+    /** @var string The action to execute in the controller. */
+    protected $actionName;
+
+    public function setControllerName($controllerName)
+    {
+        $this->controllerName = ucfirst($controllerName).'Controller';
+    }
+
+    public function setActionName($action)
+    {
+        $this->actionName = $action.'Action';
+    }
+
     /**
      * Handle the current url and dispatch the controller.
      *
@@ -44,21 +63,81 @@ class Dispatcher extends RouteCollection
      */
     public function handle($uri)
     {
-        // Retrieve our application configuration
-        $appConfig = $this->container->get('config')->getApplication();
+        // Require some services
+        $request = $this->container->get('request');
+        $config = $this->container->get('config')->getApplication();
 
-        // Create & register the application router
-        foreach($appConfig['routes'] as $name => $route) {
-            $this->add($name, $route);
-        }
-
-        // Create a request context object
-        $context = new RequestContext($appConfig['baseUri']);
-
-        // Create an url matcher based on context
-        $matcher = new UrlMatcher($this, $context);
+        // Build the fully qualified url
+        $url = $request->getSchemeAndHttpHost() . $uri;
 
         // Attempt to match a route
-        return $matcher->match($uri);
+        try {
+            // Create & register the application router
+            foreach($config['routes'] as $name => $route) {
+                $this->add($name, $route);
+            }
+
+            // Create a request context and use it to create a matcher
+            $context = new RequestContext($config['baseUri']);
+            $matcher = new UrlMatcher($this, $context);
+
+            // Attempt to match with the router
+            if($match = $matcher->match($uri)) {
+                $this->setControllerName($match['controller']);
+                $this->setActionName($match['action']);
+            }
+
+        } catch (\Exception $e) {
+            if (($postId = url_to_postid($url)) > 0) {
+                // Retrieve the posts repository
+                $entityManager = $this->container->get('database');
+                $postsRepository = $entityManager->getRepository(
+                    '\\Akufen\\Orchestra\\Mvc\\Models\\Posts'
+                );
+
+                // Attempt to find the post in the database
+                if (!static::$post = $postsRepository->findOneBy(array(
+                    'ID' => $postId,
+                    'post_status' => 'publish'
+                ))) return;
+
+                // Set the controller name
+                $this->setControllerName(static::$post->getPostType());
+
+                // Retrieve page slug, taxonomy or single action
+                $template = get_page_template_slug(static::$post->getId());
+                if (!empty($template)) {
+                    $this->setActionName(str_replace('.php', '', $template));
+                } else {
+                    $this->setActionName(
+                        is_post_type_archive(static::$post->getPostType())?
+                            'index' : 'single'
+                    );
+                }
+            } else {
+                global $wp_rewrite;
+
+                // Attempt to match personalized url structure
+                if (preg_match('#^'.$request->getPathInfo().'#', $wp_rewrite->front)) {
+                    $this->setControllerName('post');
+                    $this->setActionName('index');
+                } else {
+                    // Attempt to match a custom post type archive
+                    $slug = strtok(rtrim($request->getPathInfo(), '/'), '?');
+                    foreach ($wp_rewrite->extra_permastructs as $postType => $params) {
+                        if (preg_match("{$slug}\/\%{$postType}\%/", $params['struct'])) {
+                            $this->setControllerName($postType);
+                            $this->setActionName('index');
+                        }
+                    }
+                }
+            }
+        }
+
+        // Create the controller and execute the action
+        $controller = $config['namespace'].'\\'.$this->getControllerName();
+        $controller = new $controller();
+        $controller->setContainer($this->container);
+        $controller->{$this->getActionName()}();
     }
 }

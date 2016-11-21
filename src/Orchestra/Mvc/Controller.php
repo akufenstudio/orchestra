@@ -17,6 +17,8 @@
 
 namespace Akufen\Orchestra\Mvc;
 
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+
 use Akufen\Orchestra\Services\Dispatcher;
 use Akufen\Orchestra\Mvc\Models\Posts;
 
@@ -28,8 +30,16 @@ use Akufen\Orchestra\Mvc\Models\Posts;
  * @uses    \Phalcon\Mvc\Controller
  * @package Mvc
  */
-class Controller extends \Phalcon\Mvc\Controller
+class Controller
 {
+    use ContainerAwareTrait;
+
+
+    public function __construct()
+    {
+        $this->initialize();
+    }
+
     /**
      * Initialization function for the controller.
      *

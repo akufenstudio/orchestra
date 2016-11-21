@@ -77,12 +77,6 @@ class Application
 
         // Set the application dependency injector
         $this->setContainer($container);
-
-        // TODO: Delete these tests
-        $entityManager = $container->get('database');
-        $repo = $entityManager->getRepository(
-            '\\Akufen\\Orchestra\\Mvc\\Models\\Posts'
-        );
     }
 
     /**
