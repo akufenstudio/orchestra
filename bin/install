@@ -1,15 +1,11 @@
+echo "Enter your project name:"
+read project
 
-#echo "Enter your project name:"
-#read project
-#
-#echo "Enter your MySQL username:"
-#read user
-#
-#echo "Enter your MySQL password:"
-#read password
-project="orchestra"
-user="devteam"
-password="d3vt3am!!"
+echo "Enter your MySQL username:"
+read user
+
+echo "Enter your MySQL password:"
+read password
 
 
 # Install the latest version of WordPress
