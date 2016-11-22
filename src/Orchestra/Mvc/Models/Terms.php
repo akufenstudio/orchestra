@@ -24,34 +24,19 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses    \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_terms")
  */
 class Terms extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a term's source & relationships
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    /** @Id @Column(type="bigint", name="term_id") @GeneratedValue */
+    public $id;
 
-        $this->setSource($table_prefix . 'terms');
+    /** @Column(type="string", length=200) */
+    public $name;
 
-        // Terms have many metas
-        $this->hasMany(
-            'term_id',
-            'Akufen\Orchestra\Mvc\Models\TermMeta',
-            'term_id',
-            array('alias' => 'metas')
-        );
+    /** @Column(type="string", length=200) */
+    public $slug;
 
-        // Terms have term taxonomies
-        $this->hasMany(
-            'term_id',
-            'Akufen\Orchestra\Mvc\Models\TermTaxonomy',
-            'term_id',
-            array('alias' => 'taxonomy')
-        );
-    }
+    /** @Column(type="bigint", name="term_group) */
+    public $termGroup;
 }

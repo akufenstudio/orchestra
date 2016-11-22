@@ -28,131 +28,80 @@ namespace Akufen\Orchestra\Mvc\Models;
  */
 class Posts extends \Akufen\Orchestra\Mvc\Model
 {
-    /** @Id @Column(type="integer") @GeneratedValue **/
-    public $ID = null;
+    /** @Id @Column(type="bigint", name="ID") @GeneratedValue */
+    public $id;
 
-    /** @Column(type="integer") */
-    public $post_author;
+    /**
+     * @ManyToOne(targetEntity="Users")
+     * @JoinColumn(name="post_author", referencedColumnName="ID")
+     */
+    public $author;
 
-    /** @Column(type="datetime") */
-    public $post_date;
+    /** @Column(type="datetime", name="post_date") */
+    public $date;
 
-    /** @Column(type="datetime") */
-    public $post_date_gmt;
+    /** @Column(type="datetime", name="post_date_gmt") */
+    public $dateGmt;
 
-    /** @Column(type="text") */
-    public $post_content;
+    /** @Column(type="text", name="post_content") */
+    public $content;
 
-    /** @Column(type="string") */
-    public $post_title;
+    /** @Column(type="text", name="post_title") */
+    public $title;
 
-    /** @Column(type="text") */
-    public $post_excerpt;
+    /** @Column(type="text", name="post_excerpt") */
+    public $excerpt;
 
-    /** @Column(type="string") */
-    public $post_status;
+    /** @Column(type="string", length=20, name="post_status") */
+    public $status;
 
-    /** @Column(type="string") */
-    public $comment_status;
+    /** @Column(type="string", length=20, name="comment_status") */
+    public $commentStatus;
 
-    /** @Column(type="string") */
-    public $ping_status;
+    /** @Column(type="string", length=20, name="ping_status") */
+    public $pingStatus;
 
-    /** @Column(type="string") */
-    public $post_password;
+    /** @Column(type="string", length=20, name="post_password") */
+    public $password;
 
-    /** @Column(type="string") */
-    public $post_name;
+    /** @Column(type="string", length=200, name="post_name") */
+    public $name;
 
-    /** @Column(type="text") */
-    public $to_ping;
+    /** @Column(type="text", name="to_ping") */
+    public $toPing;
 
     /** @Column(type="text") */
     public $pinged;
 
-    /** @Column(type="datetime") */
-    public $post_modified;
+    /** @Column(type="datetime", name="post_modified") */
+    public $modified;
 
-    /** @Column(type="datetime") */
-    public $post_modified_gmt;
+    /** @Column(type="datetime", name="post_modified_gmt") */
+    public $modifiedGmt;
 
-    /** @Column(type="text") */
-    public $post_content_filtered;
+    /** @Column(type="text", name="post_content_filtered") */
+    public $contentFiltered;
 
-    /** @Column(type="integer") */
-    public $post_parent;
+    /** @Column(type="bigint", name="post_parent") */
+    public $parent;
 
     /** @Column(type="string") */
     public $guid;
 
-    /** @Column(type="integer") */
-    public $menu_order;
+    /** @Column(type="integer", name="menu_order") */
+    public $menuOrder;
 
-    /** @Column(type="string") */
-    public $post_type;
+    /** @Column(type="string", length=20, name="post_type") */
+    public $type;
 
-    /** @Column(type="string") */
-    public $post_mime_type;
+    /** @Column(type="string", length=100, name="post_mime_type") */
+    public $mimeType;
 
-    /** @Column(type="integer") */
-    public $comment_count;
+    /** @Column(type="bigint", name="comment_count") */
+    public $commentCount;
 
     /** @var string The permalink of the post. */
-    public $permalink = null;
-
-    /**
-     * Initialize a post's source & relationships
-     *
-     * @return void
-     */
-    /*public function initialize()*/
-    //{
-        //global $table_prefix;
-
-        //$this->setSource($table_prefix . 'posts');
-
-        //// Posts belong to an author
-        //$this->belongsTo(
-            //'post_author',
-            //'Akufen\Orchestra\Mvc\Models\Users',
-            //'ID',
-            //array('alias' => 'postAuthor')
-        //);
-
-        //// Posts may have parent posts
-        //$this->belongsTo(
-            //'post_parent',
-            //'Akufen\Orchestra\Mvc\Models\Posts',
-            //'ID',
-            //array('alias' => 'postParent')
-        //);
-
-        //// Posts have many post metas
-        //$this->hasMany(
-            //'ID',
-            //'Akufen\Orchestra\Mvc\Models\PostMeta',
-            //'post_id',
-            //array('alias' => 'metas')
-        //);
-
-        //// Posts have many term relationships
-        //$this->hasMany(
-            //'ID',
-            //'Akufen\Orchestra\Mvc\Models\TermRelationships',
-            //'object_id',
-            //array('alias' => 'termRelationships')
-        //);
-    /*}*/
-
-    /**
-     * Function to get the post's id.
-     *
-     * @return int $id The post's id.
-     */
-    public function getId()
-    {
-        return $this->ID;
-    }
+    public $permalink;
 
     /**
      * Retrieve the post's permalink.
@@ -161,20 +110,7 @@ class Posts extends \Akufen\Orchestra\Mvc\Model
      */
     public function getPermalink()
     {
-        if ($this->permalink == null) {
+        return ($this->permalink === null)? $this->permalink :
             $this->permalink = get_permalink($this->ID);
-        }
-
-        return $this->permalink;
-    }
-
-    /**
-     * Function to set the post's id.
-     *
-     * @return boolean True if the id has been updated.
-     */
-    public function setId($id)
-    {
-        $this->ID = intval($id);
     }
 }

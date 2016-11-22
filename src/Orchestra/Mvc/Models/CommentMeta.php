@@ -27,23 +27,11 @@ namespace Akufen\Orchestra\Mvc\Models;
  */
 class CommentMeta extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a comment meta's source & relationships
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    use \Akufen\Orchestra\Traits\MetaKeyValueTrait;
 
-        $this->setSource($table_prefix . 'commentmeta');
+    /** @Id @Column(type="bigint", name="meta_id") @GeneratedValue */
+    public $id;
 
-        // Comment meta belongs to a comment
-        $this->belongsTo(
-            'comment_id',
-            'Akufen\Orchestra\Mvc\Models\Comments',
-            'comment_ID',
-            array('alias' => 'comment')
-        );
-    }
+    /** @Column(type="bigint", name="comment_id") */
+    public $commentId;
 }

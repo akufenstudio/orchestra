@@ -24,34 +24,16 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses    \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_term_relationships")
  */
 class TermRelationships extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a term's relationship source & relationships
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    /** @Column(type="bigint", name="object_id") */
+    public $objectId;
 
-        $this->setSource($table_prefix . 'term_relationships');
+    /** @Column(type="bigint", name="term_taxonomy_id") */
+    public $termTaxonomyId;
 
-        // Term relationships have term taxonomies
-        $this->hasMany(
-            'term_taxonomy_id',
-            'Akufen\Orchestra\Mvc\Models\TermTaxonomy',
-            'term_taxonomy_id',
-            array('alias' => 'taxonomy')
-        );
-
-        // Term relationships have a post
-        $this->hasOne(
-            'object_id',
-            'Akufen\Orchestra\Mvc\Models\Posts',
-            'ID',
-            array('alias' => 'post')
-        );
-    }
+    /** @Column(type="integer", name="term_order") */
+    public $termOrder;
 }

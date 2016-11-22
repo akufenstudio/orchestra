@@ -24,18 +24,19 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses    \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_options")
  */
 class Options extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a option's source & relationships.
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    /** @Id @Column(type="bigint", name="option_id") @GeneratedValue */
+    public $id;
 
-        $this->setSource($table_prefix . 'options');
-    }
+    /** @Column(type="string", length=191, name="option_name") */
+    public $name;
+
+    /** @Column(type="text", name="option_value") */
+    public $value;
+
+    /** @Column(type="string", length=20) */
+    public $autoload;
 }

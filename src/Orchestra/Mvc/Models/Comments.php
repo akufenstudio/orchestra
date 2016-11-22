@@ -24,34 +24,52 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_comments")
  */
 class Comments extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a comment's source & relationships
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    /** @Id @Column(type="bigint", name="comment_ID") @GeneratedValue */
+    public $id;
 
-        $this->setSource($table_prefix . 'comments');
+    /** @Column(type="bigint", name="comment_post_ID") */
+    public $postId;
 
-        // Comments belong to an author
-        $this->belongsTo(
-            'comment_author',
-            'Akufen\Orchestra\Mvc\Models\Users',
-            'ID',
-            array('alias' => 'author')
-        );
+    /** @Column(type="text", name="comment_author") */
+    public $author;
 
-        // Comments have many comment metas
-        $this->hasMany(
-            'comment_ID',
-            'Akufen\Orchestra\Mvc\Models\CommentMetas',
-            'comment_id',
-            array('alias' => 'metas')
-        );
-    }
+    /** @Column(type="string", length=100, name="comment_author_email") */
+    public $authorEmail;
+
+    /** @Column(type="string", length=200, name="comment_author_url") */
+    public $authorUrl;
+
+    /** @Column(type="string", length=100, name="comment_author_IP") */
+    public $authorId;
+
+    /** @Column(type="datetime", name="comment_date") */
+    public $date;
+
+    /** @Column(type="datetime", name="comment_date_gmt") */
+    public $dateGmt;
+
+    /** @Column(type="text", name="comment_content") */
+    public $content;
+
+    /** @Column(type="integer", name="comment_karma") */
+    public $karma;
+
+    /** @Column(type="string", length=20, name="comment_approved") */
+    public $approved;
+
+    /** @Column(type="string", name="comment_agent") */
+    public $agent;
+
+    /** @Column(type="string", length=20, name="comment_type") */
+    public $type;
+
+    /** @Column(type="bigint", name="comment_parent") */
+    public $parent;
+
+    /** @Column(type="bigint", name="user_id") */
+    public $userId;
 }

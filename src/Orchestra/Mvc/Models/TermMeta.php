@@ -24,26 +24,15 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses    \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_termmeta")
  */
 class TermMeta extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a term's meta source & relationships.
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    use \Akufen\Orchestra\Traits\MetaKeyValueTrait;
 
-        $this->setSource($table_prefix . 'termmeta');
+    /** @Id @Column(type="bigint", name="meta_id") @GeneratedValue */
+    public $id;
 
-        // Term metas belong to a term
-        $this->belongsTo(
-            'term_id',
-            'Akufen\Orchestra\Mvc\Models\Terms',
-            'term_id',
-            array('alias' => 'term')
-        );
-    }
+    /** @Column(type="bigint", name="term_id") */
+    public $termId;
 }

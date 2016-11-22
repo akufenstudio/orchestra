@@ -24,26 +24,15 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses    \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_usermeta")
  */
 class UserMeta extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a user's meta source & relationships.
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    use \Akufen\Orchestra\Traits\MetaKeyValueTrait;
 
-        $this->setSource($table_prefix . 'usermeta');
+    /** @Id @Column(type="bigint", name="umeta_id") @GeneratedValue */
+    public $id;
 
-        // User metas belong to a user
-        $this->belongsTo(
-            'user_id',
-            'Akufen\Orchestra\Mvc\Models\Users',
-            'ID',
-            array('alias' => 'user')
-        );
-    }
+    /** @Column(type="integer", name="user_id") */
+    public $userId;
 }

@@ -24,26 +24,15 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses    \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_usermeta")
  */
 class PostMeta extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a post meta's source & relationships.
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    use \Akufen\Orchestra\Traits\MetaKeyValueTrait;
 
-        $this->setSource($table_prefix . 'postmeta');
+    /** @Id @Column(type="integer", name="meta_id") @GeneratedValue */
+    public $id;
 
-        // Metas belong to a post
-        $this->belongsTo(
-            'post_id',
-            'Akufen\Orchestra\Mvc\Models\Posts',
-            'ID',
-            array('alias' => 'post')
-        );
-    }
+    /** @Column(type="bigint", name="post_id") */
+    public $postId;
 }

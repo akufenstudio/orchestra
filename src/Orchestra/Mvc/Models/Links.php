@@ -24,18 +24,46 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses    \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_links")
  */
 class Links extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a link's source & relationships
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    /** @Id @Column(type="bigint", name="link_id") @GeneratedValue */
+    public $id;
 
-        $this->setSource($table_prefix . 'links');
-    }
+    /** @Column(type="string", name="link_url") */
+    public $url;
+
+    /** @Column(type="string", name="link_name") */
+    public $name;
+
+    /** @Column(type="string", name="link_image") */
+    public $image;
+
+    /** @Column(type="string", length=25, name="link_target") */
+    public $target;
+
+    /** @Column(type="string", name="link_description") */
+    public $description;
+
+    /** @Column(type="string", length=20, name="link_visible") */
+    public $visible;
+
+    /** @Column(type="bigint", name="link_owner") */
+    public $owner;
+
+    /** @Column(type="integer", name="link_rating") */
+    public $rating;
+
+    /** @Column(type="datetime", name="link_updated") */
+    public $updated;
+
+    /** @Column(type="string", name="link_rel") */
+    public $rel;
+
+    /** @Column(type="text", name="link_notes") */
+    public $notes;
+
+    /** @Column(type="string", name="link_rss") */
+    public $rss;
 }

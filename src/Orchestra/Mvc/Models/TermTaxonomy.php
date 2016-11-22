@@ -24,42 +24,25 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses    \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_term_taxonomy")
  */
 class TermTaxonomy extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a term's taxonomy source & relationships
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    /** @Id @Column(type="bigint", name="term_taxonomy_id") @GeneratedValue */
+    public $id;
 
-        $this->setSource($table_prefix . 'term_taxonomy');
+    /** @Column(type="bigint", name="term_id") */
+    public $termId;
 
-        // Term taxonomy have many relationships
-        $this->hasMany(
-            'term_taxonomy_id',
-            'Akufen\Orchestra\Mvc\Models\TermRelationships',
-            'term_taxonomy_id',
-            array('alias' => 'relationships')
-        );
+    /** @Column(type="string", length=32) */
+    public $taxonomy;
 
-        // Term taxonomy belong to a term
-        $this->belongsTo(
-            'term_id',
-            'Akufen\Orchestra\Mvc\Models\Terms',
-            'term_id',
-            array('alias' => 'term')
-        );
+    /** @Column(type="text") */
+    public $description;
 
-        // Term taxonomy belong to a parent
-        $this->belongsTo(
-            'parent',
-            'Akufen\Orchestra\Mvc\Models\TermTaxonomy',
-            'term_taxonomy_id',
-            array('alias' => 'parent')
-        );
-    }
+    /** @Column(type="bigint") */
+    public $parent;
+
+    /** @Column(type="bigint") */
+    public $count;
 }

@@ -24,34 +24,37 @@ namespace Akufen\Orchestra\Mvc\Models;
  *
  * @package Models
  * @uses    \Akufen\Orchestra\Mvc\Model
+ * @Entity @Table(name="wp_users")
  */
 class Users extends \Akufen\Orchestra\Mvc\Model
 {
-    /**
-     * Initialize a user's source & relationships.
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        global $table_prefix;
+    /** @Id @Column(type="bigint", name="ID") @GeneratedValue */
+    public $id;
 
-        $this->setSource($table_prefix . 'users');
+    /** @Column(type="string", length=60,  name="user_login") */
+    public $userLogin;
 
-        // A user has many user meta
-        $this->hasMany(
-            'ID',
-            'Akufen\Orchestra\Mvc\Models\UserMeta',
-            'user_id',
-            array('alias' => 'metas')
-        );
+    /** @Column(type="string", name="user_pass") */
+    public $userPass;
 
-        // A user has many posts
-        $this->hasMany(
-            'ID',
-            'Akufen\Orchestra\Mvc\Models\Posts',
-            'post_author',
-            array('alias' => 'posts')
-        );
-    }
+    /** @Column(type="string", length=50, name="user_nicename") */
+    public $userNicename;
+
+    /** @Column(type="string", length=100, name="user_email") */
+    public $userEmail;
+
+    /** @Column(type="string", length=100, name="user_url") */
+    public $userUrl;
+
+    /** @Column(type="datetime", name="user_registered") */
+    public $userRegistered;
+
+    /** @Column(type="string", name="user_activation_key") */
+    public $userActivationKey;
+
+    /** @Column(type="integer", name="user_status") */
+    public $userStatus;
+
+    /** @Column(type="string", length=250, name="display_name") */
+    public $displayName;
 }
