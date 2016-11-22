@@ -57,7 +57,7 @@ class Controller
      * @param Array  $params   The parameters to pass to the view.
      * @retun void
      */
-    protected function render($name , array $params = array())
+    protected function render($name, array $params = array())
     {
         // Retrieve our view service
         $view = $this->di->get('view');

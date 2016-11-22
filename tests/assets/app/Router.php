@@ -4,7 +4,6 @@ namespace App;
 
 use Symfony\Component\Routing\Route;
 
-
 /**
  * Router
  *

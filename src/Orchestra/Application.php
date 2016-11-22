@@ -101,7 +101,7 @@ class Application
         global $pagenow;
 
         // Set the data url for the router
-        if($uri === null) {
+        if ($uri === null) {
             $uri = $this->di->get('request')->getPathInfo();
         }
 

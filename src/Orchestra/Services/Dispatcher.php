@@ -77,7 +77,7 @@ class Dispatcher extends RouteCollection
         // Attempt to match a route
         try {
             // Create & register the application router
-            foreach($config['routes'] as $name => $route) {
+            foreach ($config['routes'] as $name => $route) {
                 $this->add($name, $route);
             }
 
@@ -86,11 +86,10 @@ class Dispatcher extends RouteCollection
             $matcher = new UrlMatcher($this, $context);
 
             // Attempt to match with the router
-            if($match = $matcher->match($uri)) {
+            if ($match = $matcher->match($uri)) {
                 $this->setControllerName($match['controller']);
                 $this->setActionName($match['action']);
             }
-
         } catch (\Exception $e) {
             if (($postId = url_to_postid($url)) > 0) {
                 // Retrieve the posts repository
@@ -103,7 +102,9 @@ class Dispatcher extends RouteCollection
                 if (!static::$post = $postsRepository->findOneBy(array(
                     'id' => $postId,
                     'status' => 'publish'
-                ))) return;
+                ))) {
+                    return;
+                }
 
                 // Set the controller name
                 $this->setControllerName(static::$post->getType());
