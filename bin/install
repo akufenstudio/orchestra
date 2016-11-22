@@ -1,18 +1,13 @@
-echo "Enter your project name:"
-read project
-
-echo "Enter your MySQL username:"
-read user
-
-echo "Enter your MySQL password:"
-read password
-
+# Get project information
+print "Enter your project name: " && read project
+print "Enter your MySQL username: " && read user
+print "Enter your MySQL password: " && read password
 
 # Install the latest version of WordPress
 wget https://wordpress.org/latest.zip
 unzip latest.zip
 mv wordpress/* .
-rm -rf latest.zip license.txt readme.html wordpress wp-content/plugins/akismet wp-content/plugins/hello.php
+rm -rf latest.zip license.txt readme.html wordpress wp-content/plugins/akismet wp-content/plugins/hello.php wp-content/themes/twenty*
 
 # Create WordPress configuration file
 salt=$(curl -L https://api.wordpress.org/secret-key/1.1/salt/)
@@ -24,8 +19,5 @@ gunzip < orchestra.sql.gz | mysql -u devteam --password="$password" $project
 mysql $project -u $user --password="$password" -e "UPDATE wp_options SET option_value = 'orchestra' WHERE option_name = 'template'";
 mysql $project -u $user --password="$password" -e "UPDATE wp_options SET option_value = 'orchestra' WHERE option_name = 'stylesheet'";
 
-# Remove old themes
-rm -rf wp-content/themes/twenty*
+# Checkout theme and composer install
 
-
-#Checkout theme and composer install
