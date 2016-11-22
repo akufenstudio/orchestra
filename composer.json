@@ -2,18 +2,13 @@
     "name": "akufen/orchestra",
     "type": "library",
     "description": "A minimalist object-oriented superset for WordPress using Symfony.",
-    "keywords": ["symfony", "wordpress", "mvc", "orm"],
+    "keywords": ["symfony", "doctrine", "wordpress", "mvc", "orm"],
     "homepage": "https://github.com/akufenstudio/orchestra",
     "license": "MIT",
     "authors": [
         {
             "name": "Nicholas Charbonneau",
             "email": "nicholas@akufen.ca"
-        },
-        {
-            "name": "Akufen Atelier Creatif",
-            "email": "info@akufen.ca",
-            "homepage": "http://akufen.ca/"
         }
     ],
     "require": {
