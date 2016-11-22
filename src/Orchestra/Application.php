@@ -20,11 +20,7 @@ namespace Akufen\Orchestra;
 use Akufen\Orchestra\Services\Configuration;
 use Akufen\Orchestra\Services\Dispatcher;
 use Akufen\Orchestra\Services\View;
-use Akufen\Orchestra\Traits\InjectionAwareTrait;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\TemplateNameParser;
@@ -42,7 +38,7 @@ use Doctrine\ORM\EntityManager;
  */
 class Application
 {
-    use InjectionAwareTrait;
+    use \Akufen\Orchestra\Traits\InjectionAwareTrait;
 
     /** @const The application database configuration. */
     const DB_CONFIG = array(
@@ -59,7 +55,7 @@ class Application
     public function __construct()
     {
         // Create dependency injector container
-        $di = new ContainerBuilder();
+        $di = new \Symfony\Component\DependencyInjection\ContainerBuilder();
 
         // Register basic services
         $di->set('config', $config = new Configuration());

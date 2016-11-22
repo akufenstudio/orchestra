@@ -17,6 +17,11 @@
 
 namespace Akufen\Orchestra\Services;
 
+use Akufen\Orchestra\Traits\AccessibleTrait;
+use Akufen\Orchestra\Config\Application;
+
+use Symfony\Component\Config\Definition\Processor;
+
 /**
  * Akufen\Orchestra\Services\Configuration
  *
@@ -26,7 +31,7 @@ namespace Akufen\Orchestra\Services;
  */
 class Configuration
 {
-    use \Akufen\Orchestra\Traits\AccessibleTrait;
+    use AccessibleTrait;
 
     /** @var Array The application configuration arrray. */
     private $application = null;
@@ -46,11 +51,9 @@ class Configuration
             );
         }
 
-        // Build our configuration processor
-        $processor = new \Symfony\Component\Config\Definition\Processor();
-
         // Retrieve the application configuration
-        $validator = new \Akufen\Orchestra\Config\Application();
+        $processor = new Processor();
+        $validator = new Application();
         $this->application = $processor->processConfiguration(
             $validator,
             include $file

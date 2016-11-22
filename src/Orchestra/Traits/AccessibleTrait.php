@@ -17,8 +17,6 @@
 
 namespace Akufen\Orchestra\Traits;
 
-use Akufen\Orchestra\Helpers\Strings;
-
 /**
  * Akufen\Orchestra\Traits\AccessibleTrait
  *
@@ -40,9 +38,6 @@ trait AccessibleTrait
         // Handle a get method on a service
         if (preg_match('/^get/', $method)) {
             $property = lcfirst(substr($method, 3));
-            if (!isset($this->{$property})) {
-                $property = Strings::toUnderscores($property);
-            }
             return $this->get($property);
         }
 

@@ -18,11 +18,11 @@
 namespace Akufen\Orchestra\Services;
 
 use Akufen\Orchestra\Traits\AccessibleTrait;
+use Akufen\Orchestra\Traits\InjectionAwareTrait;
 
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Akufen\Orchestra\Services\Dispatcher
@@ -34,7 +34,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 class Dispatcher extends RouteCollection
 {
     use AccessibleTrait;
-    use ContainerAwareTrait;
+    use InjectionAwareTrait;
 
     /** @var \Akufen\Orchestra\Mvc\Models\Posts A post that match the request url. */
     static $post;
@@ -64,8 +64,8 @@ class Dispatcher extends RouteCollection
     public function handle($uri)
     {
         // Require some services
-        $request = $this->container->get('request');
-        $config = $this->container->get('config')->getApplication();
+        $request = $this->di->get('request');
+        $config = $this->di->get('config')->getApplication();
 
         // Build the fully qualified url
         $url = $request->getSchemeAndHttpHost() . $uri;
@@ -94,19 +94,19 @@ class Dispatcher extends RouteCollection
         } catch (\Exception $e) {
             if (($postId = url_to_postid($url)) > 0) {
                 // Retrieve the posts repository
-                $entityManager = $this->container->get('database');
+                $entityManager = $this->di->get('database');
                 $postsRepository = $entityManager->getRepository(
                     '\\Akufen\\Orchestra\\Mvc\\Models\\Posts'
                 );
 
                 // Attempt to find the post in the database
                 if (!static::$post = $postsRepository->findOneBy(array(
-                    'ID' => $postId,
-                    'post_status' => 'publish'
+                    'id' => $postId,
+                    'status' => 'publish'
                 ))) return;
 
                 // Set the controller name
-                $this->setControllerName(static::$post->getPostType());
+                $this->setControllerName(static::$post->getType());
 
                 // Retrieve page slug, taxonomy or single action
                 $template = get_page_template_slug(static::$post->getId());
@@ -140,8 +140,8 @@ class Dispatcher extends RouteCollection
 
         // Create the controller and execute the action
         $controller = $config['namespace'].'\\'.$this->getControllerName();
-        $controller = new $controller($this->container);
-        $controller->setContainer($this->container);
+        $controller = new $controller();
+        $controller->setContainer($this->di);
         $controller->initialize();
 
         return $controller->{$this->getActionName()}();
