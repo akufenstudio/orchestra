@@ -68,8 +68,6 @@ trait AccessibleTrait
     {
         $name = strval($name);
 
-        // Setting the property to null first because Symfony converts array keys to properties
-        $this->$name = null;
         $this->$name = $value;
     }
 

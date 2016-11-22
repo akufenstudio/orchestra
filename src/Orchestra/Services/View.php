@@ -18,11 +18,9 @@
 namespace Akufen\Orchestra\Services;
 
 use Akufen\Orchestra\Traits\AccessibleTrait;
+use Akufen\Orchestra\Traits\InjectionAwareTrait;
 
 use Symfony\Component\Templating\PhpEngine;
-use Symfony\Component\Templating\TemplateNameParser;
-use Symfony\Component\Templating\Loader\FilesystemLoader;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Akufen\Orchestra\Services\View
@@ -33,20 +31,17 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
  */
 class View extends PhpEngine
 {
-    use ContainerAwareTrait;
+    use AccessibleTrait;
+    use InjectionAwareTrait;
 
-    public function __construct()
+    /**
+     * {@inheritDoc}
+     */
+    public function render($name, array $params = array(), $partial = false)
     {
-        $config = $this->container->get('config')->getApplication();
-
-        $loader = new FilesystemLoader(
-            get_template_directory() . $config['views'] . '/'
-        );
-
-        parent::__construct(
-            new TemplateNameParser(),
-            $loader
-        );
+        return $partial? parent::render($name, $params) :
+            parent::render('index', array_merge($params, array(
+                'content' => parent::render($name, $params)
+            )));
     }
-
 }

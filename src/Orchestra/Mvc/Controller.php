@@ -17,11 +17,9 @@
 
 namespace Akufen\Orchestra\Mvc;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
-use Akufen\Orchestra\Services\Dispatcher;
 use Akufen\Orchestra\Mvc\Models\Posts;
+use Akufen\Orchestra\Services\Dispatcher;
+use Akufen\Orchestra\Traits\InjectionAwareTrait;
 
 /**
  * Akufen\Orchestra\Mvc\Controller
@@ -31,12 +29,9 @@ use Akufen\Orchestra\Mvc\Models\Posts;
  * @uses    \Phalcon\Mvc\Controller
  * @package Mvc
  */
-class Controller implements ContainerAwareInterface
+class Controller
 {
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
+    use InjectionAwareTrait;
 
     /**
      * Initialization function for the controller.
@@ -58,16 +53,21 @@ class Controller implements ContainerAwareInterface
     /**
      * Renders a template as our main content.
      *
-     * @param String $template The relative path to the template.
+     * @param String $name The name of the template.
      * @param Array  $params   The parameters to pass to the view.
      * @retun void
      */
-    protected function render($template, array $params = array())
+    protected function render($name , array $params = array())
     {
+        // Retrieve our view service
+        $view = $this->di->get('view');
+
         // Render a template as our main content
-        $this->view->content = $this->view->getPartial(
-            $template,
-            $params
-        );
+        $content = $view->render($name, $params);
+
+        // Send a response
+        $response = $this->di->get('response');
+        $response->setContent($content);
+        $response->send();
     }
 }

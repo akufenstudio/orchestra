@@ -20,10 +20,15 @@ namespace Akufen\Orchestra;
 use Akufen\Orchestra\Services\Configuration;
 use Akufen\Orchestra\Services\Dispatcher;
 use Akufen\Orchestra\Services\View;
+use Akufen\Orchestra\Traits\InjectionAwareTrait;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Templating\TemplateNameParser;
+use Symfony\Component\Templating\Loader\FilesystemLoader;
 
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
@@ -37,7 +42,16 @@ use Doctrine\ORM\EntityManager;
  */
 class Application
 {
-    use ContainerAwareTrait;
+    use InjectionAwareTrait;
+
+    /** @const The application database configuration. */
+    const DB_CONFIG = array(
+        'driver' => 'pdo_mysql',
+        'user' => DB_USER,
+        'password' => DB_PASSWORD,
+        'dbname' => DB_NAME,
+        'charset' => DB_CHARSET
+    );
 
     /**
      * Application class constructor
@@ -45,30 +59,26 @@ class Application
     public function __construct()
     {
         // Create dependency injector container
-        $container = new ContainerBuilder();
+        $di = new ContainerBuilder();
 
         // Register basic services
-        $config = new Configuration();
-        $container->set('config', $config);
-        $container->set('request', Request::createFromGlobals());
+        $di->set('config', $config = new Configuration());
+        $di->set('request', Request::createFromGlobals());
+        $di->set('response', new Response());
 
         // Register the request dispatcher
-        $container->register('dispatcher', new Dispatcher())
-            ->addMethodCall('setContainer', array($container));
+        $di->register('dispatcher', new Dispatcher())
+            ->addMethodCall('setContainer', array($di));
 
         // Register the view rendering object
-        $container->register('view', new View())
-            ->addMethodCall('setContainer', array($container));
+        $viewsDir = get_template_directory().$config->getApplication()['views'].'/%name%.phtml';
+        $view = new View(new TemplateNameParser(), new FilesystemLoader($viewsDir));
+        $view->setContainer($di);
+        $di->set('view', $view);
 
         // Register our entity manager
-        $container->set('database', EntityManager::create(
-            array(
-                'driver' => 'pdo_mysql',
-                'user' => DB_USER,
-                'password' => DB_PASSWORD,
-                'dbname' => DB_NAME,
-                'charset' => DB_CHARSET
-            ),
+        $di->set('database', EntityManager::create(
+            Application::DB_CONFIG,
             Setup::createAnnotationMetadataConfiguration(
                 array(__DIR__ . '/Mvc/Models'),
                 !$config->getApplication()['production']
@@ -81,14 +91,14 @@ class Application
         }
 
         // Set the application dependency injector
-        $this->setContainer($container);
+        $this->setContainer($di);
     }
 
     /**
      * Bootstrap the orchestra application.
      *
      * @params String $uri The uri to handle
-     * @return void
+     * @return $this Daisy chaining
      */
     public function handle($uri = null)
     {
@@ -96,13 +106,30 @@ class Application
 
         // Set the data url for the router
         if($uri === null) {
-            $uri = $this->container->get('request')->getPathInfo();
+            $uri = $this->di->get('request')->getPathInfo();
         }
 
         // Handle the request & paste rendered html
         if (!is_admin() && $pagenow !== 'wp-login.php') {
             status_header(200);
-            echo $this->container->get('dispatcher')->handle($uri);
+            $this->di->get('dispatcher')->handle($uri);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Send the exit signal to avoid wordpress rendering.
+     *
+     * @return void
+     */
+    public function leave()
+    {
+        global $pagenow;
+
+        // Leave the application
+        if (!is_admin() && $pagenow !== 'wp-login.php') {
+            exit();
         }
     }
 }

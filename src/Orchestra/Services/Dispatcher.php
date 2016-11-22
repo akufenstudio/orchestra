@@ -70,6 +70,10 @@ class Dispatcher extends RouteCollection
         // Build the fully qualified url
         $url = $request->getSchemeAndHttpHost() . $uri;
 
+        // Initialize controler and action name
+        $this->setControllerName('error');
+        $this->setActionName('show404');
+
         // Attempt to match a route
         try {
             // Create & register the application router
@@ -139,6 +143,7 @@ class Dispatcher extends RouteCollection
         $controller = new $controller($this->container);
         $controller->setContainer($this->container);
         $controller->initialize();
-        $controller->{$this->getActionName()}();
+
+        return $controller->{$this->getActionName()}();
     }
 }
