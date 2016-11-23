@@ -17,11 +17,6 @@
 
 namespace Akufen\Orchestra\Services;
 
-use Akufen\Orchestra\Traits\AccessibleTrait;
-use Akufen\Orchestra\Config\Application;
-
-use Symfony\Component\Config\Definition\Processor;
-
 /**
  * Akufen\Orchestra\Services\Configuration
  *
@@ -29,9 +24,9 @@ use Symfony\Component\Config\Definition\Processor;
  *
  * @package Orchestra
  */
-class Configuration
+class Configuration implements \Symfony\Component\Config\Definition\ConfigurationInterface
 {
-    use AccessibleTrait;
+    use \Akufen\Orchestra\Traits\AccessibleTrait;
 
     /** @var Array The application configuration arrray. */
     private $application = null;
@@ -52,11 +47,33 @@ class Configuration
         }
 
         // Retrieve the application configuration
-        $processor = new Processor();
-        $validator = new Application();
+        $processor = new \Symfony\Component\Config\Definition\Processor();
         $this->application = $processor->processConfiguration(
-            $validator,
+            $this,
             include $file
         );
+    }
+
+    /**
+     * Returns the configuration tree for validation.
+     *
+     * @return TreeBuilder $treeBuilder
+     */
+    public function getConfigTreeBuilder()
+    {
+        // Create the tree builder
+        $treeBuilder = new \Symfony\Component\Config\Definition\Builder\TreeBuilder();
+        $rootNode = $treeBuilder->root('application');
+
+        // Declare the configuration tree
+        $rootNode->children()
+            ->scalarNode('baseUri')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('namespace')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('views')->isRequired()->cannotBeEmpty()->end()
+            ->booleanNode('production')->isRequired()->defaultFalse()->end()
+            ->arrayNode('routes')->prototype('variable')->end()
+            ->end();
+
+        return $treeBuilder;
     }
 }

@@ -40,15 +40,6 @@ class Application
 {
     use \Akufen\Orchestra\Traits\InjectionAwareTrait;
 
-    /** @const The application database configuration. */
-    const DB_CONFIG = array(
-        'driver' => 'pdo_mysql',
-        'user' => DB_USER,
-        'password' => DB_PASSWORD,
-        'dbname' => DB_NAME,
-        'charset' => DB_CHARSET
-    );
-
     /**
      * Application class constructor
      */
@@ -74,7 +65,13 @@ class Application
 
         // Register our entity manager
         $di->set('database', EntityManager::create(
-            Application::DB_CONFIG,
+            array(
+                'driver' => 'pdo_mysql',
+                'user' => DB_USER,
+                'password' => DB_PASSWORD,
+                'dbname' => DB_NAME,
+                'charset' => DB_CHARSET
+            ),
             Setup::createAnnotationMetadataConfiguration(
                 array(__DIR__ . '/Mvc/Models'),
                 !$config->getApplication()['production']
