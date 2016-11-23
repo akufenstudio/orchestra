@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/travis/akufenstudio/orchestra/master.svg)](https://travis-ci.org/akufenstudio/orchestra)
 [![Latest Version](https://img.shields.io/badge/Latest%20Version-0.2.0-blue.svg)](https://packagist.org/packages/akufen/orchestra)
 
-Orchestra is a minimalist object-oriented superset that uses [Phalcon](https://phalconphp.com/) as a framework to bootstrap [WordPress](https://wordpress.org/) with an MVC environment and Object-Relational Mapping.
+Orchestra is a minimalist object-oriented superset that uses [Symfony](https://symfony.com/) as a framework and [Doctrine](http://www.doctrine-project.org/) as an ORM to help make robust and scalable websites or applications with [WordPress](https://wordpress.org/).
 
 ## Installation
 Orchestra can be installed inside your theme with [Composer](https://getcomposer.org/) using this command:
@@ -18,10 +18,10 @@ To bootstrap Orchestra, add this to your `functions.php` file.
     require __DIR__ . '/vendor/autoload.php';
     add_action('wp', function() {
         $app = new \Akufen\Orchestra\Application();
-        $app->handle();
+        $app->handle()->leave();
     });
 
-This allows Orchestra to take over WordPress thus making it much faster and object-oriented. Application can be instantiated outside the action in order to register project specific services.
+This allows Orchestra to take over WordPress and makes it much faster and object-oriented.
 
 ## Resources
 * Access the API indice [here](http://akufenstudio.github.io/orchestra/).
