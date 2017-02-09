@@ -189,7 +189,7 @@ class Application extends \Phalcon\Mvc\Application
         // Handle the request & paste rendered html
         if (!is_admin() && $pagenow !== 'wp-login.php') {
             status_header(200);
-            echo parent::handle()->getContent();
+            die(parent::handle()->getContent());
         }
     }
 }
