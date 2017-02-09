@@ -26,6 +26,34 @@ namespace Akufen\Orchestra\Helpers;
  */
 class Strings
 {
+    /*
+     * Limit a number of characters starting at a specific index and append
+     * Ellipsis at the end of the string.
+     *
+     * @param string $string The string to limit
+     * @param int $count The number of characters to limit at
+     * @param int $offset The starting position of the string
+     * @param bool $ellipsis True to append Ellipsis at the end of the string
+     * @return $string The string limited at x characters with/without Ellipsis
+     */
+    public static function limitCharacters($string, $count, $offset = 0,
+        $ellipsis = true){
+
+        // Make sure the offset is valid, otherwise cut the string
+        // at the offset if it's not zero
+        if(!is_int($offset) || $offset < 0 || $offset >= strlen($string))
+            $offset = 0;
+        else if($offset !== 0)
+            $string = substr($string, $offset);
+
+        // If the length of the string is less than the count, return all
+        if(strlen($string) < $count)
+            return $string;
+
+        // Return the string with/without Ellipsis
+        return substr($string, 0, $count) . ($ellipsis ? '...' : '');
+    }
+
     /**
      * Converts a camel case string to an underscored one
      *
