@@ -65,7 +65,7 @@ class Application extends \Phalcon\Mvc\Application
         $di->setShared('url', function () use ($config) {
 
             // Create url service with configuration base uri
-            $url = new \Phalcon\Mvc\Url();
+            $url = new \Phalcon\Url();
 
             // Prepare the base uri for our application
             $baseUri = isset($config->application->baseUri)?
@@ -189,7 +189,7 @@ class Application extends \Phalcon\Mvc\Application
         // Handle the request & paste rendered html
         if (!is_admin() && $pagenow !== 'wp-login.php') {
             status_header(200);
-            exit(parent::handle()->getContent());
+            exit(parent::handle($_GET['_url'])->getContent());
         }
     }
 }
