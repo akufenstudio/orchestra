@@ -26,7 +26,7 @@ use Akufen\Orchestra\Mvc\Models\Posts;
  *
  * @package Services
  */
-class Dispatcher extends \Phalcon\Mvc\User\Plugin
+class Dispatcher extends \Phalcon\Di\Injectable
 {
     /** @var \Akufen\Orchestra\Mvc\Models\Posts A post that match the request url. */
     public static $post = null;

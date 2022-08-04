@@ -4,7 +4,7 @@
  */
 
 namespace App;
-use Phalcon\Di\DiInterface;
+
 /**
  * Module
  *
@@ -19,7 +19,7 @@ class Module implements \Phalcon\Mvc\ModuleDefinitionInterface
      *
      * @return void
      */
-    public function registerAutoloaders(DiInterface $di = null)
+    public function registerAutoloaders(\Phalcon\DiInterface $di = null)
     {
         // Auto-loaders configuration
         $loader = new \Phalcon\Loader();
@@ -37,7 +37,7 @@ class Module implements \Phalcon\Mvc\ModuleDefinitionInterface
      * @param \Phalcon\DI\FactoryDefault $di The dependency injector.
      * @return void
      */
-    public function registerServices(DiInterface $di)
+    public function registerServices(\Phalcon\DiInterface $di)
     {
         // Store local instance of the configuration
         $config = $di->getConfig();

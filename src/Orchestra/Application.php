@@ -65,7 +65,7 @@ class Application extends \Phalcon\Mvc\Application
         $di->setShared('url', function () use ($config) {
 
             // Create url service with configuration base uri
-            $url = new \Phalcon\Mvc\Url();
+            $url = new \Phalcon\Url();
 
             // Prepare the base uri for our application
             $baseUri = isset($config->application->baseUri)?
